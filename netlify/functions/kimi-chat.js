@@ -5,6 +5,13 @@ exports.handler = async function (event) {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   }
 
+if (!process.env.KIMI_API_KEY) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'KIMI_API_KEY is missing in Netlify Environment Variables.' })
+    };
+  }
+
   try {
     const { teacherName, subject, prompt } = JSON.parse(event.body || '{}');
 

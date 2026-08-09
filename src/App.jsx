@@ -18,13 +18,12 @@ import {
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCsxmNTIe_VYBWrl_EIl6gbX7I6XljaNMM",
-  authDomain: "school-lasavo-org.firebaseapp.com",
-  projectId: "school-lasavo-org",
-  storageBucket: "school-lasavo-org.firebasestorage.app",
-  messagingSenderId: "1062124671658",
-  appId: "1:1062124671658:web:3cb71e8063918f2460f6d3",
-  measurementId: "G-TSMX8D24K3"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 // DO NOT CHANGE CODE BELOW THIS LINE
