@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free', onSelectPlan }) {
-  const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'yearly'
+  const [billingCycle, setBillingCycle] = useState('yearly'); // 'monthly' | 'yearly'
   const [currency, setCurrency] = useState('INR'); // 'INR' | 'USD'
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
@@ -11,15 +11,15 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
   const plans = [
     {
       id: 'starter',
-      name: 'Starter Student',
-      badge: 'Popular for K-10',
-      priceINR: billingCycle === 'monthly' ? 499 : 4999,
-      priceUSD: billingCycle === 'monthly' ? 9 : 89,
+      name: 'Starter Academic Pass',
+      badge: 'Basic K-10 Access',
+      priceINR: billingCycle === 'monthly' ? 3999 : 18000,
+      priceUSD: billingCycle === 'monthly' ? 49 : 219,
       period: billingCycle === 'monthly' ? '/mo' : '/yr',
       features: [
-        'Access to all CBSE & ICSE Class 1-10 modules',
-        '2-Way Interactive AI Avatar Tutor sessions (50 hrs/mo)',
-        'NCERT Aligned Question Bank & Automated Quizzes',
+        'Access to CBSE & ICSE Class 1-10 course modules',
+        '2-Way Interactive AI Avatar Tutor sessions (30 hrs/mo)',
+        'NCERT Aligned Question Bank & Practice Quizzes',
         'Parent Progress Dashboard & TMS Analytics',
         'Basic Email Support'
       ],
@@ -29,37 +29,36 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
     },
     {
       id: 'pro',
-      name: 'Pro Academy & SaaS Pass',
-      badge: 'Best Value',
-      priceINR: billingCycle === 'monthly' ? 1499 : 14999,
-      priceUSD: billingCycle === 'monthly' ? 29 : 289,
+      name: 'EdTech Interactive Platform & Doubt-Solving Pass',
+      badge: '⭐ ₹40,000 / 1 Year — RECOMMENDED TIER',
+      priceINR: billingCycle === 'monthly' ? 3999 : 40000,
+      priceUSD: billingCycle === 'monthly' ? 49 : 480,
       period: billingCycle === 'monthly' ? '/mo' : '/yr',
       features: [
-        'Unrestricted Class 1-12 AI Avatar Video/Audio Tutoring',
-        'Unlimited NCERT & JEE/NEET Practice Tests',
-        'Full Civil Engineering BIM/CAD AI Analysis Tools',
-        'RoofRestore Lead Generation & Prospecting Engine',
-        '24/7 Priority AI Tutor & Engineer Support',
-        'Multi-device simultaneous login'
+        '🎓 Complete CBSE & ICSE Class 1-12 Interactive Course Hubs',
+        '🎥 24/7 Unlimited 2-Way Voice & Video AI Avatar Classrooms',
+        '💡 Real-Time AI Doubt Solving across all NCERT STEM & Humanities Subjects',
+        '📊 Parent & Teacher Management System (TMS) Analytics, Streaks & Homework',
+        '🎙️ Low-Bandwidth Audio Mode + HD Video Mode with Custom AI Faculty Switcher',
+        '📜 Interactive Digital Chalkboard & Automated NCERT Workbooks'
       ],
       popular: true,
       color: 'from-indigo-600 to-purple-600',
-      buttonBg: 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-600/30'
+      buttonBg: 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white shadow-lg shadow-indigo-600/30'
     },
     {
       id: 'enterprise',
-      name: 'Enterprise & School Suite',
-      badge: 'For Institutions',
-      priceINR: billingCycle === 'monthly' ? 4999 : 49999,
-      priceUSD: billingCycle === 'monthly' ? 99 : 999,
+      name: 'Institutional & School Suite',
+      badge: 'For Schools & Academies',
+      priceINR: billingCycle === 'monthly' ? 14999 : 150000,
+      priceUSD: billingCycle === 'monthly' ? 199 : 1800,
       period: billingCycle === 'monthly' ? '/mo' : '/yr',
       features: [
-        'Unlimited School/Institution Accounts & Seat Licenses',
-        'Customized NCERT Curriculum & Custom Avatar Training',
-        'Automated PE Stamping Workbench & Bulk CAD/BIM AI',
-        'Dedicated Outbound Lead Automation Campaign Manager',
-        'API Access & Custom Webhook Integrations',
-        'Dedicated Account Manager & SLA Guarantee'
+        'Unlimited School & Institutional Student Seat Licenses',
+        'Custom NCERT & State Board Avatar Persona Training',
+        'Institutional TMS Command Center & Multi-Classroom Analytics',
+        'Dedicated Outbound Parent Communication & SLA Guarantee',
+        'Custom API Webhook Integration & Dedicated Account Manager'
       ],
       popular: false,
       color: 'from-amber-600 to-orange-600',
@@ -73,14 +72,14 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
     // Simulate Razorpay Gateway Integration
     setTimeout(() => {
       setLoadingPlan(null);
-      setSuccessMessage(`Successfully subscribed to ${plan.name} (${currency} ${currency === 'INR' ? plan.priceINR : plan.priceUSD}${plan.period})!`);
+      setSuccessMessage(`Successfully upgraded to ${plan.name} (${currency} ${currency === 'INR' ? plan.priceINR.toLocaleString('en-IN') : plan.priceUSD}${plan.period})!`);
       if (onSelectPlan) {
         onSelectPlan(plan.id);
       }
       setTimeout(() => {
         setSuccessMessage('');
         onClose();
-      }, 2000);
+      }, 2200);
     }, 1200);
   };
 
@@ -99,13 +98,13 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-8">
           <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full">
-            Lasavo Monetization & Subscriptions
+            Lasavo EdTech Monetization & Subscription Pass
           </span>
           <h2 className="text-2xl md:text-3xl font-extrabold text-white">
-            Unlock Full Access to Lasavo AI SaaS Suite
+            Interactive EdTech Course Hub & AI Doubt Solving Pass
           </h2>
           <p className="text-xs text-slate-400">
-            Scale your learning, engineering workflows, and lead generation with AI. Upgrade or change your plan anytime.
+            Get 1-Year Unlimited Access to CBSE & ICSE Class 1-12 AI Avatar Classrooms, 24/7 Doubt Solving & TMS Analytics.
           </p>
 
           {/* Controls: Billing Cycle & Currency Switcher */}
@@ -118,7 +117,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                   billingCycle === 'monthly' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                Monthly
+                Monthly Pass
               </button>
               <button
                 onClick={() => setBillingCycle('yearly')}
@@ -126,9 +125,9 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                   billingCycle === 'yearly' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <span>Annual Pass</span>
+                <span>1-Year Annual Pass (₹40,000/yr)</span>
                 <span className="text-[9px] bg-emerald-500 text-slate-950 px-1.5 py-0.5 rounded-full uppercase font-black">
-                  Save 20%
+                  BEST VALUE
                 </span>
               </button>
             </div>
@@ -173,21 +172,21 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                 key={plan.id}
                 className={`bg-slate-950 rounded-3xl p-6 border flex flex-col justify-between relative transition hover:scale-[1.02] ${
                   plan.popular
-                    ? 'border-indigo-500/80 ring-2 ring-indigo-500/30 shadow-2xl shadow-indigo-500/10'
+                    ? 'border-indigo-500/80 ring-2 ring-indigo-500/40 shadow-2xl shadow-indigo-500/20'
                     : 'border-slate-800 hover:border-slate-700'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-extrabold text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-extrabold text-[10px] uppercase tracking-widest px-4 py-1 rounded-full shadow-lg">
                     {plan.badge}
                   </div>
                 )}
 
                 <div>
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-lg font-bold text-white">{plan.name}</h3>
+                  <div className="flex justify-between items-start mb-3 mt-1">
+                    <h3 className="text-base font-bold text-white leading-snug">{plan.name}</h3>
                     {!plan.popular && (
-                      <span className="text-[10px] text-slate-500 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] text-slate-500 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-full shrink-0">
                         {plan.badge}
                       </span>
                     )}
@@ -203,7 +202,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                     {plan.features.map((feat, idx) => (
                       <li key={idx} className="flex items-start space-x-2">
                         <span className="text-indigo-400 font-bold">✓</span>
-                        <span>{feat}</span>
+                        <span className="leading-snug">{feat}</span>
                       </li>
                     ))}
                   </ul>
@@ -221,9 +220,9 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                   {loadingPlan === plan.id ? (
                     <span className="animate-pulse">Connecting to Razorpay...</span>
                   ) : isCurrent ? (
-                    <span>Current Active Plan</span>
+                    <span>Active EdTech Pass ✓</span>
                   ) : (
-                    <span>Subscribe via Razorpay 💳</span>
+                    <span>Subscribe for {price} 💳</span>
                   )}
                 </button>
               </div>
@@ -234,11 +233,11 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
         {/* Footer info */}
         <div className="mt-8 pt-4 border-t border-slate-800/80 flex flex-wrap justify-between items-center text-[11px] text-slate-500">
           <div className="flex items-center space-x-4">
-            <span>🔒 256-Bit SSL Encrypted</span>
-            <span>⚡ Instant Activation</span>
-            <span>💳 Razorpay & UPI Supported</span>
+            <span>🔒 256-Bit SSL Secured</span>
+            <span>⚡ Instant AI Avatar Activation</span>
+            <span>💳 Razorpay, UPI & Netbanking</span>
           </div>
-          <span>Cancel anytime with 1-click refund policy.</span>
+          <span>EdTech Interactive Platform & 24/7 Doubt Solving Suite</span>
         </div>
 
       </div>

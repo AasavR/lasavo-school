@@ -1,5 +1,21 @@
+import { callAIModel } from '../services/aiModelService';
+
 export class LeadEnrichmentAgent {
   async enrichLeadsForCounty(countyName) {
+    // Generate base parcel data via AI Agent service
+    const aiPrompt = `Generate a realistic commercial roof lead for county: ${countyName} with parcel ID, owner LLC, sq ft (>30,000 sq ft), roof type, estimated deal value, and contact info.`;
+    const systemPrompt = `You are an AI Lead Enrichment Agent for commercial flat roof restoration.`;
+    
+    try {
+      const response = await callAIModel({ prompt: aiPrompt, systemPrompt });
+      if (response.startsWith('{')) {
+        const parsed = JSON.parse(response);
+        return [{ id: 'lead_ai_' + Date.now(), priorityLevel: 1, ...parsed }];
+      }
+    } catch (e) {
+      console.log('Using default structured leads');
+    }
+
     if (countyName.includes('Hillsborough')) {
       return [
         {

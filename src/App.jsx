@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AIDoctorPlatform from './components/AIDoctorPlatform';
 import CurriculumBrowser from './components/CurriculumBrowser';
 import AIAvatarClassroom from './components/AIAvatarClassroom';
 import ParentTMSDashboard from './components/ParentTMSDashboard';
@@ -10,8 +11,8 @@ import APIKeyModal from './components/APIKeyModal';
 import './index.css';
 
 export default function App() {
-  // Navigation Tabs: 'academy' (E-Learning), 'engineering' (Civil AI), 'outreach' (Micro-SaaS Hub)
-  const [activeTab, setActiveTab] = useState('academy');
+  // Navigation Tabs: 'doctor' (IIT Delhi AI Health), 'academy' (E-Learning), 'engineering' (Civil AI), 'outreach' (Micro-SaaS Hub)
+  const [activeTab, setActiveTab] = useState('doctor');
   const [academySubView, setAcademySubView] = useState('browser'); // 'browser' | 'classroom' | 'tms'
   
   // Classroom Session state
@@ -61,6 +62,20 @@ export default function App() {
 
         {/* Core Product Navigation Tabs */}
         <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800/80 text-xs font-bold space-x-1">
+          <button
+            onClick={() => setActiveTab('doctor')}
+            className={`px-4 py-2 rounded-xl transition flex items-center space-x-2 ${
+              activeTab === 'doctor'
+                ? 'bg-gradient-to-r from-teal-500 to-emerald-600 text-slate-950 font-black shadow-lg shadow-teal-500/20'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span>🩺 AI Doctor & Tele-Health</span>
+            <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30">
+              IIT Delhi
+            </span>
+          </button>
+
           <button
             onClick={() => setActiveTab('academy')}
             className={`px-4 py-2 rounded-xl transition flex items-center space-x-2 ${
@@ -123,6 +138,13 @@ export default function App() {
       {/* Main App Content View */}
       <main className="flex-1 flex flex-col p-4 md:p-6">
         
+        {/* TAB 0: Lasavo & IIT Delhi AI Doctor & Tele-Health Platform */}
+        {activeTab === 'doctor' && (
+          <div className="flex-1">
+            <AIDoctorPlatform />
+          </div>
+        )}
+
         {/* TAB 1: Lasavo AI Academy */}
         {activeTab === 'academy' && (
           <div className="flex-1 flex flex-col space-y-6">

@@ -3,11 +3,20 @@ import { LeadEnrichmentAgent } from '../../agents/lead_enrichment_agent.js';
 import { PhoneOutreachAgent } from '../../agents/phone_outreach_agent.js';
 import { EmailOutreachAgent } from '../../agents/email_outreach_agent.js';
 import { OperationsEscalationAgent } from '../../agents/operations_escalation_agent.js';
+import { callAIModel } from '../services/aiModelService.js';
+import APIKeyModal from './APIKeyModal.jsx';
 
 export default function RoofRestoreAIOutreachHub() {
-  const [activeTab, setActiveTab] = useState('command-center'); // 'command-center' | 'gis-leads' | 'phone-sim' | 'email-cadence' | 'escalations-eod'
+  const [activeTab, setActiveTab] = useState('command-center'); // 'command-center' | 'gis-leads' | 'phone-sim' | 'email-cadence' | 'escalations-eod' | 'ai-playground'
   const [selectedCounty, setSelectedCounty] = useState('Hillsborough County');
   const [selectedTerritoryTier, setSelectedTerritoryTier] = useState('all');
+
+  // AI Model Key State
+  const [isApiKeyOpen, setIsApiKeyOpen] = useState(false);
+  const [aiProvider, setAiProvider] = useState(localStorage.getItem('lasavo_ai_provider') || 'kimi');
+  const [playgroundPrompt, setPlaygroundPrompt] = useState('Draft an aggressive cold email pitch for a 80,000 sq ft industrial warehouse in Manchester NH offering elastomeric roof coating vs $400k tear-off.');
+  const [playgroundResult, setPlaygroundResult] = useState('');
+  const [isQueryingAI, setIsQueryingAI] = useState(false);
 
   // Agent State
   const [isAgentRunning, setIsAgentRunning] = useState(false);
@@ -61,6 +70,24 @@ export default function RoofRestoreAIOutreachHub() {
   const addLog = (agent, message, type = 'info') => {
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     setAgentLogs(prev => [{ id: Date.now(), time: timeStr, agent, message, type }, ...prev]);
+  };
+
+  const handleQueryAIPlayground = async () => {
+    if (!playgroundPrompt.trim()) return;
+    setIsQueryingAI(true);
+    setPlaygroundResult(`[${aiProvider.toUpperCase()} AI Querying...]`);
+    try {
+      const res = await callAIModel({
+        prompt: playgroundPrompt,
+        systemPrompt: 'You are an elite AI Sales SDR & Lead Generation Agent for Commercial Roof Restoration.'
+      });
+      setPlaygroundResult(res);
+      addLog('AI Agent Workbench', `Executed live AI prompt via ${aiProvider.toUpperCase()} model`, 'success');
+    } catch (err) {
+      setPlaygroundResult('Error: ' + err.message);
+    } finally {
+      setIsQueryingAI(false);
+    }
   };
 
   const handleRunFullOutreachCycle = async () => {
@@ -164,7 +191,16 @@ export default function RoofRestoreAIOutreachHub() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => setIsApiKeyOpen(true)}
+              className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500 text-xs font-bold text-slate-200 shadow-md transition flex items-center space-x-2 active:scale-95"
+            >
+              <span className="text-amber-400">🤖</span>
+              <span>AI Engine: {aiProvider === 'kimi' ? 'Kimi K3 (Moonshot)' : aiProvider === 'openrouter' ? 'OpenRouter Free' : 'Gemini 2.5 Flash'}</span>
+              <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded uppercase">Config Key</span>
+            </button>
+
             <button
               onClick={handleRunFullOutreachCycle}
               disabled={isAgentRunning}
@@ -275,6 +311,17 @@ export default function RoofRestoreAIOutreachHub() {
           }`}
         >
           🚨 SOP 4 & 6: Escalations & EOD Reports
+        </button>
+
+        <button
+          onClick={() => setActiveTab('ai-playground')}
+          className={`px-4 py-2.5 rounded-xl font-medium text-sm transition whitespace-nowrap ${
+            activeTab === 'ai-playground'
+              ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg shadow-amber-500/30'
+              : 'text-amber-400 hover:text-amber-200 hover:bg-slate-900 border border-amber-500/20'
+          }`}
+        >
+          🤖 SOP 5: AI Model Workbench (Kimi / Free API)
         </button>
       </div>
 
@@ -917,6 +964,104 @@ Executive Lead, Lasavo Commercial Sales | RoofRestore5x`
           </div>
         </div>
       )}
+
+      {/* TAB 5: AI MODEL WORKBENCH (Kimi AI & Free APIs) */}
+      {activeTab === 'ai-playground' && (
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl animate-fade-in">
+          <div className="flex flex-wrap justify-between items-center gap-4 pb-6 border-b border-slate-800">
+            <div>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
+                SOP Section 5 • Low Cost AI Model Integration
+              </span>
+              <h2 className="text-2xl font-bold text-white mt-2">Kimi AI & Free AI SDR Agent Workbench</h2>
+              <p className="text-xs text-slate-400 mt-1">
+                Execute live prompt engineering with <strong>Kimi K3 (Moonshot AI)</strong>, <strong>OpenRouter Free Tier</strong>, or <strong>Google Gemini Flash</strong> for zero/cheap outbound campaigns.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setIsApiKeyOpen(true)}
+              className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center space-x-2"
+            >
+              <span>⚙️ Configure {aiProvider.toUpperCase()} Key</span>
+            </button>
+          </div>
+
+          {/* Quick Preset Buttons */}
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-300">Quick Agent SOP Prompt Templates:</label>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <button
+                onClick={() => setPlaygroundPrompt('Generate a JSON lead record for a 95,000 sq ft industrial logistics warehouse in Nashua NH with EPDM roof type, estimated deal value, and VP Facilities contact info.')}
+                className="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-xl transition"
+              >
+                🔍 Lead Identification Prompt
+              </button>
+              <button
+                onClick={() => setPlaygroundPrompt('Draft a 3-sentence high-converting cold email to Marcus Vance (VP Asset Management) offering a free thermal moisture audit for Gateway Industrial.')}
+                className="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-xl transition"
+              >
+                ✉️ Cold Email Pitch Prompt
+              </button>
+              <button
+                onClick={() => setPlaygroundPrompt('Write a phone voice script to counter the objection: "We prefer full tear-off and replacement rather than fluid-applied coating."')}
+                className="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-xl transition"
+              >
+                📞 Objection Rebuttal Script
+              </button>
+            </div>
+          </div>
+
+          {/* Prompt Form */}
+          <div className="space-y-3">
+            <textarea
+              rows={4}
+              value={playgroundPrompt}
+              onChange={e => setPlaygroundPrompt(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono leading-relaxed"
+              placeholder="Enter custom SDR prompt for Kimi AI / Free Model..."
+            />
+
+            <div className="flex justify-between items-center">
+              <span className="text-[11px] text-slate-500">
+                Active Provider: <strong className="text-amber-400 font-bold uppercase">{aiProvider}</strong> (Free / Cheap Ingestion Mode)
+              </span>
+
+              <button
+                onClick={handleQueryAIPlayground}
+                disabled={isQueryingAI}
+                className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-extrabold text-xs px-6 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition active:scale-95 flex items-center space-x-2"
+              >
+                {isQueryingAI ? (
+                  <span>Querying {aiProvider.toUpperCase()}...</span>
+                ) : (
+                  <span>Execute AI Agent Prompt 🚀</span>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Result Output */}
+          {playgroundResult && (
+            <div className="bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-2 font-mono text-xs">
+              <div className="flex justify-between items-center text-[10px] text-slate-500 pb-2 border-b border-slate-900">
+                <span className="text-emerald-400 font-bold">LIVE AI MODEL OUTPUT TELEMETRY</span>
+                <span>Response Time: ~0.4s</span>
+              </div>
+              <pre className="text-slate-200 whitespace-pre-wrap leading-relaxed font-mono">
+                {playgroundResult}
+              </pre>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* API Key Modal */}
+      <APIKeyModal
+        isOpen={isApiKeyOpen}
+        onClose={() => setIsApiKeyOpen(false)}
+        onSaveKeys={({ provider }) => setAiProvider(provider)}
+      />
     </div>
   );
 }
