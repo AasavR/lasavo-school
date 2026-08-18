@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function AIDoctorPlatform() {
+export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedActiveTab }) {
   // Global & Navigation State
   const [selectedLanguage, setSelectedLanguage] = useState('English');
-  const [activeTab, setActiveTab] = useState('teleconsult'); // 'teleconsult' | 'mentalwellness' | 'pharma' | 'labtests' | 'botanical' | 'symptomchecker'
-  
+  const [activeTab, setActiveTab] = useState(initialTab); // 'teleconsult' | 'aiconsultation' | 'mentalwellness' | 'pharma' | 'labtests'
+
+  useEffect(() => {
+    if (forcedActiveTab) {
+      setActiveTab(forcedActiveTab);
+    }
+  }, [forcedActiveTab]);
+
   // Doctor Avatars State
   const [activeAvatar, setActiveAvatar] = useState({
     id: 'doc1',
@@ -29,7 +35,7 @@ export default function AIDoctorPlatform() {
   const [isRecording, setIsRecording] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [consultationStatus, setConsultationStatus] = useState('Active'); // 'Active' | 'Rx Generated'
+  const [consultationStatus, setConsultationStatus] = useState('Active');
 
   // Modals State
   const [showRxModal, setShowRxModal] = useState(false);
@@ -40,7 +46,7 @@ export default function AIDoctorPlatform() {
   const [moodRating, setMoodRating] = useState(7);
   const [wellnessNotes, setWellnessNotes] = useState('');
   const [sessionActive, setSessionActive] = useState(false);
-  const [therapyType, setTherapyType] = useState('Cognitive Behavioral (CBT)');
+  const [therapyType, setTherapyType] = useState('Cognitive Behavioral Therapy (CBT)');
 
   // Service 2: E-Pharmacy State
   const [cart, setCart] = useState([]);
@@ -50,9 +56,8 @@ export default function AIDoctorPlatform() {
   const [selectedLabTest, setSelectedLabTest] = useState(null);
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
-  // Service 4: Botanical & Phytomedicine Analyzer State
+  // Botanical Phytomedicine State (Part of AI Consultation Suite)
   const [selectedPlant, setSelectedPlant] = useState(null);
-  const [botanicalQuery, setBotanicalQuery] = useState('');
 
   // Symptom Checker State
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
@@ -62,7 +67,7 @@ export default function AIDoctorPlatform() {
     {
       id: 'doc1',
       name: 'Dr. Ananya Sharma, MD',
-      specialty: 'General Physician & Triage',
+      specialty: 'General Physician & Clinical Triage',
       hospital: 'IIT Delhi AI Clinical Center',
       avatarImg: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400',
       badge: 'Pan-India 24/7',
@@ -72,7 +77,7 @@ export default function AIDoctorPlatform() {
     {
       id: 'doc2',
       name: 'Dr. Rajesh Verma, DM',
-      specialty: 'Cardiology & Heart Care',
+      specialty: 'Cardiology & Heart Health',
       hospital: 'IIT Delhi Medical Tech Research Wing',
       avatarImg: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400',
       badge: 'AI ECG Scanner',
@@ -161,12 +166,12 @@ export default function AIDoctorPlatform() {
 
   const symptomList = [
     { id: 's1', label: 'High Fever (>100°F)', severity: 'High', category: 'General' },
-    { id: 's2', label: 'Persistent Cough', severity: 'Moderate', category: 'Respiratory' },
+    { id: 's2', label: 'Persistent Cough / Breathlessness', severity: 'Moderate', category: 'Respiratory' },
     { id: 's3', label: 'Severe Headache / Migraine', severity: 'Moderate', category: 'Neurological' },
     { id: 's4', label: 'Chest Pain or Tightness', severity: 'Emergency', category: 'Cardiovascular' },
     { id: 's5', label: 'Skin Rash or Itching', severity: 'Low', category: 'Dermatology' },
-    { id: 's6', label: 'Anxiety or Sleep Loss', severity: 'Moderate', category: 'Mental Health' },
-    { id: 's7', label: 'Abdominal Cramps / Nausea', severity: 'Moderate', category: 'Digestive' }
+    { id: 's6', label: 'Anxiety or Insomnia', severity: 'Moderate', category: 'Mental Health' },
+    { id: 's7', label: 'Abdominal Pain / Nausea', severity: 'Moderate', category: 'Digestive' }
   ];
 
   // Speech Synthesis Helper
@@ -190,14 +195,14 @@ export default function AIDoctorPlatform() {
     setIsSpeaking(true);
 
     setTimeout(() => {
-      let replyText = `Thank you. I have analyzed your query with our IIT Delhi clinical diagnostic protocols. `;
+      let replyText = `Thank you. I have evaluated your symptoms with our IIT Delhi clinical diagnostic protocols. `;
       if (currentInput.toLowerCase().includes('fever') || currentInput.toLowerCase().includes('headache')) {
-        replyText += `For acute fever or mild headache, rest, oral hydration, and Paracetamol 650mg are standard first-line care. I have prepared an e-Prescription for you.`;
+        replyText += `For acute fever or headache, oral hydration and Paracetamol 650mg are recommended. I have generated a digital e-Prescription.`;
         generateDigitalRx(currentInput, 'Paracetamol 650mg TDS (3 days)');
       } else if (currentInput.toLowerCase().includes('stress') || currentInput.toLowerCase().includes('anxiety')) {
-        replyText += `I recommend trying our Video Psychology Avatar session under Mental Wellness for structured CBT reflection.`;
+        replyText += `Please switch to the Video Psychology Avatar tab for guided CBT reflection with Dr. Kavita Menon.`;
       } else {
-        replyText += `I have logged your clinical notes. You can view your verified e-Prescription or book home sample collection.`;
+        replyText += `Your symptoms have been logged in your digital health record. You can view your verified e-Prescription below.`;
         generateDigitalRx(currentInput, 'Multivitamin & Hydration Supplement');
       }
 
@@ -221,7 +226,7 @@ export default function AIDoctorPlatform() {
         { name: medName, dosage: '1-0-1 (After Food)', duration: '3 Days', instructions: 'Take with warm water' },
         { name: 'ORS / Hydration Electrolyte Powder', dosage: 'As needed', duration: '5 Days', instructions: 'Dissolve 1 sachet in 1L water' }
       ],
-      qrCodeData: 'VERIFIED-IIT-DELHI-LASAVO-TELEHEALTH-2026'
+      qrCodeData: 'VERIFIED-IIT-DELHI-LASAVO-HEALTH-2026'
     });
     setConsultationStatus('Rx Generated');
   };
@@ -240,11 +245,10 @@ export default function AIDoctorPlatform() {
     const hasHigh = selectedSymptoms.some((s) => s.severity === 'High');
 
     let triage = {
-      level: hasEmergency ? 'Emergency Alert' : hasHigh ? 'Urgent AI Consultation Recommended' : 'Routine Care',
-      color: hasEmergency ? 'red' : hasHigh ? 'amber' : 'emerald',
+      level: hasEmergency ? 'Emergency Red Alert' : hasHigh ? 'Urgent AI Triage Recommended' : 'Routine Care',
       advice: hasEmergency
-        ? 'Please seek immediate physical emergency medical care or call 108. AI Doctor Avatar is standby for preliminary triage.'
-        : 'Connect with Dr. Ananya Sharma on the AI Doctor Avatar console for immediate digital prescription.',
+        ? 'Please seek immediate emergency medical care or call 108. AI Doctor Avatar is standby for preliminary clinical triage.'
+        : 'Connect with Dr. Ananya Sharma on the AI Doctor Avatar console for instant digital prescription.',
       suggestedAvatar: hasEmergency ? 'Dr. Rajesh Verma (Cardiology)' : 'Dr. Ananya Sharma (General Medicine)'
     };
     setTriageResult(triage);
@@ -253,32 +257,29 @@ export default function AIDoctorPlatform() {
   return (
     <div className="flex flex-col space-y-6 max-w-7xl mx-auto w-full pb-16 text-slate-100 font-sans">
       
-      {/* Top Header & Partnership Banner */}
+      {/* Top Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-teal-950 to-indigo-950 p-6 md:p-8 border border-teal-500/30 shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-2 max-w-3xl">
             <div className="flex flex-wrap items-center gap-2">
               <span className="bg-teal-500/20 text-teal-300 border border-teal-500/40 text-[11px] font-black uppercase px-3 py-1 rounded-full tracking-wider flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></span>
-                Official Partnership • Lasavo Pvt Ltd & IIT Delhi
+                Official Tech Alliance • Lasavo Pvt Ltd & IIT Delhi
               </span>
               <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[11px] font-bold px-3 py-1 rounded-full">
-                Pan-India Telemedicine Platform
+                Pan-India Tele-Health Service
               </span>
             </div>
 
             <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Lasavo AI Doctor & Tele-Consultation Suite
+              Autonomous AI Doctor & Tele-Consultation Platform
             </h1>
 
             <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
-              Serving citizens across 28 States & 8 Union Territories. Consult realistic 24/7 AI Doctor Avatars without physical doctor presence. Features instant NMC telemedicine digital prescriptions, video psychology avatars, e-pharmacy delivery, and AYUSH phytomedicine ingredient analysis.
+              Consult 24/7 realistic AI Doctor Avatars without doctor presence. Powered by IIT Delhi clinical models for immediate symptom triage, NMC-compliant digital e-prescriptions, video psychology avatars, e-pharmacy delivery, and AYUSH phytomedicine ingredient analysis.
             </p>
           </div>
 
-          {/* Right Language & Quick Action Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             <select
               value={selectedLanguage}
@@ -290,7 +291,6 @@ export default function AIDoctorPlatform() {
               <option value="Hinglish">🌐 Hinglish</option>
               <option value="Tamil">🌐 தமிழ் (Tamil)</option>
               <option value="Telugu">🌐 తెలుగు (Telugu)</option>
-              <option value="Gujarati">🌐 ગુજરાતી (Gujarati)</option>
             </select>
 
             <button
@@ -303,8 +303,8 @@ export default function AIDoctorPlatform() {
         </div>
       </div>
 
-      {/* Main Feature Tabs */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      {/* Main Sub-Navigation Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         
         <button
           onClick={() => setActiveTab('teleconsult')}
@@ -315,14 +315,34 @@ export default function AIDoctorPlatform() {
           }`}
         >
           <div className="flex justify-between items-center">
-            <span className="text-2xl">👩‍⚕️</span>
+            <span className="text-2xl">🩺</span>
             <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-teal-500/20 text-teal-300">
-              Primary
+              Tab 1
             </span>
           </div>
           <div>
-            <h3 className={`font-extrabold text-xs ${activeTab === 'teleconsult' ? 'text-white' : 'text-slate-300'}`}>AI Doctor Consultation</h3>
-            <p className="text-[10px] text-slate-400 mt-0.5">24/7 Realistic Avatars</p>
+            <h3 className={`font-extrabold text-xs ${activeTab === 'teleconsult' ? 'text-white' : 'text-slate-300'}`}>AI Doctor Avatars</h3>
+            <p className="text-[10px] text-slate-400 mt-0.5">24/7 Online Consult</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('aiconsultation')}
+          className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-2 ${
+            activeTab === 'aiconsultation'
+              ? 'bg-gradient-to-br from-teal-950/90 to-slate-900 border-teal-500/60 shadow-lg shadow-teal-500/10'
+              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 text-slate-400'
+          }`}
+        >
+          <div className="flex justify-between items-center">
+            <span className="text-2xl">🤖</span>
+            <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-teal-500/20 text-teal-300">
+              Tab 2
+            </span>
+          </div>
+          <div>
+            <h3 className={`font-extrabold text-xs ${activeTab === 'aiconsultation' ? 'text-white' : 'text-slate-300'}`}>AI Consultation Suite</h3>
+            <p className="text-[10px] text-slate-400 mt-0.5">Triage, Rx & Phytomedicine</p>
           </div>
         </button>
 
@@ -337,7 +357,7 @@ export default function AIDoctorPlatform() {
           <div className="flex justify-between items-center">
             <span className="text-2xl">🧠</span>
             <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
-              Service 1
+              Tab 3
             </span>
           </div>
           <div>
@@ -357,12 +377,12 @@ export default function AIDoctorPlatform() {
           <div className="flex justify-between items-center">
             <span className="text-2xl">💊</span>
             <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
-              Service 2
+              Tab 4
             </span>
           </div>
           <div>
-            <h3 className={`font-extrabold text-xs ${activeTab === 'pharma' ? 'text-white' : 'text-slate-300'}`}>E-Pharmacy & Rx</h3>
-            <p className="text-[10px] text-slate-400 mt-0.5">Doorstep Pan-India Medicine</p>
+            <h3 className={`font-extrabold text-xs ${activeTab === 'pharma' ? 'text-white' : 'text-slate-300'}`}>E-Pharmacy</h3>
+            <p className="text-[10px] text-slate-400 mt-0.5">Pan-India Medicine</p>
           </div>
         </button>
 
@@ -377,50 +397,29 @@ export default function AIDoctorPlatform() {
           <div className="flex justify-between items-center">
             <span className="text-2xl">🔬</span>
             <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">
-              Service 3
+              Tab 5
             </span>
           </div>
           <div>
-            <h3 className={`font-extrabold text-xs ${activeTab === 'labtests' ? 'text-white' : 'text-slate-300'}`}>Lab Diagnostic Booking</h3>
+            <h3 className={`font-extrabold text-xs ${activeTab === 'labtests' ? 'text-white' : 'text-slate-300'}`}>Lab Diagnostics</h3>
             <p className="text-[10px] text-slate-400 mt-0.5">Home Sample Collection</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('botanical')}
-          className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-2 col-span-2 sm:col-span-1 ${
-            activeTab === 'botanical'
-              ? 'bg-gradient-to-br from-green-950/90 to-slate-900 border-green-500/60 shadow-lg shadow-green-500/10'
-              : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 text-slate-400'
-          }`}
-        >
-          <div className="flex justify-between items-center">
-            <span className="text-2xl">🌿</span>
-            <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded bg-green-500/20 text-green-300">
-              Phytomedicine
-            </span>
-          </div>
-          <div>
-            <h3 className={`font-extrabold text-xs ${activeTab === 'botanical' ? 'text-white' : 'text-slate-300'}`}>Botanical Phytomedicine</h3>
-            <p className="text-[10px] text-slate-400 mt-0.5">Plant Ingredient AI</p>
           </div>
         </button>
 
       </div>
 
-      {/* TAB 0: AI Doctor Avatar & Consultation Studio */}
+      {/* TAB 1: AI Doctor Avatar & Consultation Studio */}
       {activeTab === 'teleconsult' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* Left Avatar Roster */}
           <div className="lg:col-span-4 space-y-4">
             <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 space-y-4 shadow-xl">
               <div className="flex justify-between items-center border-b border-slate-800 pb-3">
                 <h3 className="text-xs font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
-                  <span>👨‍⚕️ Available AI Doctor Avatars</span>
+                  <span>👨‍⚕️ Select AI Doctor Avatar</span>
                 </h3>
                 <span className="text-[10px] font-bold bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded-full border border-teal-500/20">
-                  IIT-D Validated
+                  IIT-D Calibrated
                 </span>
               </div>
 
@@ -450,7 +449,6 @@ export default function AIDoctorPlatform() {
               </div>
             </div>
 
-            {/* Quick Digital Prescription Box */}
             {generatedRx && (
               <div className="bg-gradient-to-br from-teal-950/80 to-slate-950 p-5 rounded-3xl border border-teal-500/40 space-y-3 shadow-xl">
                 <div className="flex justify-between items-center">
@@ -458,7 +456,7 @@ export default function AIDoctorPlatform() {
                   <span className="text-[10px] font-mono bg-slate-900 text-teal-400 px-2 py-0.5 rounded">{generatedRx.id}</span>
                 </div>
                 <p className="text-xs text-slate-300">
-                  Prescribed by <strong className="text-white">{generatedRx.doctorName}</strong> for <em className="text-teal-300">"{generatedRx.chiefComplaint}"</em>
+                  Prescribed by <strong className="text-white">{generatedRx.doctorName}</strong>
                 </p>
                 <button
                   onClick={() => setShowRxModal(true)}
@@ -470,12 +468,10 @@ export default function AIDoctorPlatform() {
             )}
           </div>
 
-          {/* Right Live Video Avatar Console & Interactive Chat */}
           <div className="lg:col-span-8 space-y-4">
             
             <div className="bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col">
               
-              {/* Header */}
               <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex justify-between items-center">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-2xl overflow-hidden border border-teal-500/40">
@@ -494,7 +490,7 @@ export default function AIDoctorPlatform() {
                       voiceEnabled ? 'bg-teal-500/20 text-teal-300 border-teal-500/40' : 'bg-slate-800 text-slate-400 border-slate-700'
                     }`}
                   >
-                    {voiceEnabled ? '🔊 AI Voice ON' : '🔇 AI Voice Muted'}
+                    {voiceEnabled ? '🔊 AI Voice ON' : '🔇 Muted'}
                   </button>
 
                   <span className="flex items-center gap-1.5 text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full">
@@ -504,7 +500,6 @@ export default function AIDoctorPlatform() {
                 </div>
               </div>
 
-              {/* Video Screen */}
               <div className="relative aspect-video bg-slate-950 flex items-center justify-center overflow-hidden">
                 <img
                   src={activeAvatar.avatarImg}
@@ -514,12 +509,6 @@ export default function AIDoctorPlatform() {
                   }`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/40 pointer-events-none"></div>
-
-                <div className="absolute top-4 left-4 flex flex-col space-y-1">
-                  <span className="bg-slate-900/80 backdrop-blur text-[10px] text-slate-300 font-mono px-2.5 py-1 rounded-lg border border-slate-700/60">
-                    LATENCY: 38ms • IIT-D CLINICAL ENGINE
-                  </span>
-                </div>
 
                 {isSpeaking && (
                   <div className="absolute bottom-6 flex items-end space-x-1.5 h-8 bg-slate-950/80 backdrop-blur px-4 py-2 rounded-2xl border border-teal-500/40">
@@ -531,7 +520,6 @@ export default function AIDoctorPlatform() {
                 )}
               </div>
 
-              {/* Consultation Messages */}
               <div className="p-4 h-64 overflow-y-auto space-y-3 bg-slate-950/70 border-t border-slate-800">
                 {messages.map((m, idx) => (
                   <div
@@ -554,7 +542,6 @@ export default function AIDoctorPlatform() {
                 ))}
               </div>
 
-              {/* Input Area */}
               <div className="p-3 bg-slate-900 border-t border-slate-800 flex items-center space-x-2">
                 <button
                   onClick={() => setIsRecording(!isRecording)}
@@ -591,16 +578,142 @@ export default function AIDoctorPlatform() {
         </div>
       )}
 
-      {/* TAB 1: Service 1 - Mental Wellness Video Psychology Avatar */}
+      {/* TAB 2: AI Consultation & Clinical Intelligence Suite (Everything About AI Consultation) */}
+      {activeTab === 'aiconsultation' && (
+        <div className="bg-slate-900/90 border border-teal-500/30 rounded-3xl p-6 md:p-8 space-y-6">
+          
+          <div className="border-b border-slate-800 pb-4">
+            <span className="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">
+              Tab 2 • Everything About AI Consultation
+            </span>
+            <h2 className="text-xl md:text-2xl font-extrabold text-white mt-2">
+              AI Clinical Consultation & Phytomedicine Intelligence Suite
+            </h2>
+            <p className="text-slate-300 text-xs mt-1">
+              Integrated clinical diagnostic engine powered by IIT Delhi models. Features symptom triage, digital e-prescriptions, drug-herb interaction checks, and AYUSH botanical ingredient analysis.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* Left: AI Symptom Checker & Clinical Assessment */}
+            <div className="lg:col-span-6 bg-slate-950 p-6 rounded-3xl border border-slate-800 space-y-4">
+              <h3 className="text-sm font-extrabold text-white flex items-center justify-between">
+                <span>🩺 AI Symptom Assessment & Triage</span>
+                <span className="text-[10px] font-mono text-teal-400 bg-slate-900 px-2 py-0.5 rounded">IIT-D Diagnostic v4.2</span>
+              </h3>
+
+              <div className="grid grid-cols-2 gap-2">
+                {symptomList.map((sym) => {
+                  const isSelected = selectedSymptoms.some((s) => s.id === sym.id);
+                  return (
+                    <button
+                      key={sym.id}
+                      onClick={() => toggleSymptom(sym)}
+                      className={`p-3 rounded-2xl border text-left text-xs transition ${
+                        isSelected
+                          ? 'bg-teal-950 border-teal-500 text-white font-bold'
+                          : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                      }`}
+                    >
+                      <span>{sym.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={runSymptomTriage}
+                className="w-full bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black py-3 rounded-2xl text-xs shadow-lg transition"
+              >
+                Run AI Clinical Triage Assessment
+              </button>
+
+              {triageResult && (
+                <div className="p-4 bg-slate-900 rounded-2xl border border-teal-500/30 space-y-2 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="font-extrabold text-teal-300">Clinical Triage Level:</span>
+                    <span className="bg-teal-500/20 text-teal-300 px-2.5 py-0.5 rounded font-bold">{triageResult.level}</span>
+                  </div>
+                  <p className="text-slate-300">{triageResult.advice}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Right: Botanical & Phytomedicine Ingredient Analyzer */}
+            <div className="lg:col-span-6 bg-slate-950 p-6 rounded-3xl border border-slate-800 space-y-4">
+              <h3 className="text-sm font-extrabold text-white flex items-center justify-between">
+                <span>🌿 Botanical Phytomedicine AI Inspector</span>
+                <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-0.5 rounded">AYUSH Compliant</span>
+              </h3>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-400">Select Medicinal Extract:</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {botanicalPlants.map((plant) => (
+                    <button
+                      key={plant.id}
+                      onClick={() => setSelectedPlant(plant)}
+                      className={`p-2.5 rounded-xl border text-left text-xs transition ${
+                        selectedPlant?.name === plant.name
+                          ? 'bg-green-950 border-green-500 text-white font-bold'
+                          : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                      }`}
+                    >
+                      <span className="block font-bold">{plant.name}</span>
+                      <span className="text-[10px] text-green-400">{plant.sansKritName}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {selectedPlant && (
+                <div className="p-4 bg-slate-900 rounded-2xl border border-green-500/30 space-y-3 text-xs">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-bold text-white">{selectedPlant.name}</h4>
+                      <p className="text-[10px] text-green-400 font-mono">{selectedPlant.ayushCategory}</p>
+                    </div>
+                    <span className="text-[10px] bg-green-500/20 text-green-300 px-2 py-0.5 rounded">
+                      {selectedPlant.safetyRating}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] text-slate-400 block font-bold">Active Bio-Compounds:</span>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {selectedPlant.activeCompounds.map((c, i) => (
+                        <span key={i} className="bg-slate-950 text-green-300 px-2 py-0.5 rounded text-[10px] font-mono border border-green-500/20">
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] text-slate-400 block font-bold">Therapeutic Action & Dosage:</span>
+                    <p className="text-slate-300 text-[11px] mt-0.5">{selectedPlant.benefits}</p>
+                    <span className="text-teal-400 font-mono text-[10px] block mt-1">Dosage: {selectedPlant.dosage}</span>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: Service 1 - Mental Wellness Video Psychology Avatar */}
       {activeTab === 'mentalwellness' && (
         <div className="bg-slate-900/90 border border-indigo-500/30 rounded-3xl p-6 md:p-8 space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 gap-4">
             <div>
               <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">
-                Service 1 • Mental Wellness Avatar
+                Tab 3 • Mental Wellness Studio
               </span>
               <h2 className="text-xl md:text-2xl font-extrabold text-white mt-2">
-                Video Psychology Avatar & AI Emotional Therapy Studio
+                Video Psychology Avatar & AI Emotional Therapy
               </h2>
               <p className="text-slate-300 text-xs mt-1">
                 Converse in real-time with Dr. Kavita Menon, your 24/7 AI Psychology Avatar. Confidential CBT therapy, stress management, and emotional wellness guidance.
@@ -695,16 +808,16 @@ export default function AIDoctorPlatform() {
         </div>
       )}
 
-      {/* TAB 2: Service 2 - E-Pharmacy & Online Medicine Delivery */}
+      {/* TAB 4: Service 2 - E-Pharmacy & Online Medicine Delivery */}
       {activeTab === 'pharma' && (
         <div className="bg-slate-900/90 border border-emerald-500/30 rounded-3xl p-6 md:p-8 space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 gap-4">
             <div>
               <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">
-                Service 2 • E-Pharmacy Service
+                Tab 4 • Pan-India E-Pharmacy
               </span>
               <h2 className="text-xl md:text-2xl font-extrabold text-white mt-2">
-                Pan-India Express Online Pharmacy & Prescription Fulfilment
+                Pan-India Express Online Pharmacy & Medicine Fulfilment
               </h2>
               <p className="text-slate-300 text-xs mt-1">
                 Order genuine prescribed medicines, OTC healthcare supplies, and Ayurvedic wellness products with fast doorstep delivery across India.
@@ -763,7 +876,7 @@ export default function AIDoctorPlatform() {
 
             <div className="md:col-span-4 bg-slate-950 p-5 rounded-3xl border border-slate-800 space-y-4">
               <h3 className="text-xs font-extrabold text-white flex items-center gap-2">
-                <span>📄 Delivery Summary</span>
+                <span>📄 Order Summary</span>
               </h3>
 
               <div className="space-y-2 text-xs">
@@ -781,7 +894,7 @@ export default function AIDoctorPlatform() {
               </div>
 
               <button className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-2xl text-xs transition shadow-lg shadow-emerald-500/20">
-                Proceed to Pay & Ship (Pan-India)
+                Proceed to Pay & Ship
               </button>
             </div>
 
@@ -789,13 +902,13 @@ export default function AIDoctorPlatform() {
         </div>
       )}
 
-      {/* TAB 3: Service 3 - Diagnostic Lab Test Booking */}
+      {/* TAB 5: Service 3 - Diagnostic Lab Test Booking */}
       {activeTab === 'labtests' && (
         <div className="bg-slate-900/90 border border-amber-500/30 rounded-3xl p-6 md:p-8 space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 gap-4">
             <div>
               <span className="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">
-                Service 3 • Diagnostic Services
+                Tab 5 • Diagnostic Services
               </span>
               <h2 className="text-xl md:text-2xl font-extrabold text-white mt-2">
                 Home Diagnostic Sample Collection & Lab Test Booking
@@ -845,96 +958,6 @@ export default function AIDoctorPlatform() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* TAB 4: Botanical & Phytomedicine Ingredient Analyzer (Specialized AI Engine) */}
-      {activeTab === 'botanical' && (
-        <div className="bg-slate-900/90 border border-green-500/30 rounded-3xl p-6 md:p-8 space-y-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 gap-4">
-            <div>
-              <span className="bg-green-500/20 text-green-300 border border-green-500/30 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">
-                Phytomedicine AI • AYUSH Ingredient Inspector
-              </span>
-              <h2 className="text-xl md:text-2xl font-extrabold text-white mt-2">
-                Botanical & Herbal Ingredient Active Compound Analyzer
-              </h2>
-              <p className="text-slate-300 text-xs mt-1">
-                AI Phytomedicine engine co-developed with IIT Delhi for analyzing bioactive compounds, AYUSH regulatory compliance, and herb-drug safety interactions.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            {/* Plant List */}
-            <div className="lg:col-span-5 space-y-3">
-              <h3 className="text-xs font-extrabold text-white uppercase tracking-wider">Select Botanical Extract</h3>
-              <div className="space-y-3">
-                {botanicalPlants.map((plant) => (
-                  <div
-                    key={plant.id}
-                    onClick={() => setSelectedPlant(plant)}
-                    className={`p-4 rounded-2xl border cursor-pointer transition ${
-                      selectedPlant?.name === plant.name
-                        ? 'bg-green-950/60 border-green-500/60 ring-1 ring-green-500/40'
-                        : 'bg-slate-950 border-slate-800 hover:border-slate-700'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <h4 className="text-xs font-bold text-white">{plant.name}</h4>
-                      <span className="text-xs text-green-400 font-serif font-bold">{plant.sansKritName}</span>
-                    </div>
-                    <p className="text-[11px] text-slate-400 mt-1">{plant.ayushCategory}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Plant Active Details */}
-            <div className="lg:col-span-7 bg-slate-950 p-6 rounded-3xl border border-slate-800 space-y-5">
-              {selectedPlant ? (
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start border-b border-slate-800 pb-3">
-                    <div>
-                      <h3 className="text-base font-extrabold text-white">{selectedPlant.name}</h3>
-                      <p className="text-xs text-green-400 font-semibold">{selectedPlant.sansKritName} • {selectedPlant.ayushCategory}</p>
-                    </div>
-                    <span className="bg-green-500/20 text-green-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-green-500/30">
-                      {selectedPlant.safetyRating}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h4 className="text-xs font-extrabold text-slate-300">Active Bioactive Compounds Identified:</h4>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {selectedPlant.activeCompounds.map((comp, idx) => (
-                        <span key={idx} className="bg-slate-900 text-green-300 border border-green-500/30 text-xs px-3 py-1 rounded-xl font-mono font-bold">
-                          🔬 {comp}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-1">
-                    <h4 className="text-xs font-extrabold text-slate-300">Therapeutic Pharmacological Action:</h4>
-                    <p className="text-xs text-slate-300 leading-relaxed">{selectedPlant.benefits}</p>
-                  </div>
-
-                  <div className="p-3.5 bg-slate-900 rounded-2xl border border-slate-800 space-y-1">
-                    <h4 className="text-xs font-extrabold text-teal-400">Standardized Therapeutic Dosage:</h4>
-                    <p className="text-xs text-slate-300 font-mono">{selectedPlant.dosage}</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="h-64 flex flex-col items-center justify-center text-center p-6 text-slate-500 space-y-2">
-                  <span className="text-4xl">🌿</span>
-                  <p className="text-xs font-bold">Select any medicinal plant extract on the left to analyze bioactive compounds.</p>
-                </div>
-              )}
-            </div>
-
           </div>
         </div>
       )}
@@ -1066,7 +1089,7 @@ export default function AIDoctorPlatform() {
               <div className="p-4 bg-slate-950 rounded-2xl border border-teal-500/30 space-y-2 text-xs">
                 <div className="flex justify-between items-center">
                   <span className="font-extrabold text-teal-300">Triage Result:</span>
-                  <span className="bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded font-bold">{triageResult.level}</span>
+                  <span className="bg-teal-500/20 text-teal-300 px-2.5 py-0.5 rounded font-bold">{triageResult.level}</span>
                 </div>
                 <p className="text-slate-300">{triageResult.advice}</p>
               </div>
