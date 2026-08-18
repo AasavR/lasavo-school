@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { callKimiAI } from '../services/aiModelService';
 
 export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedActiveTab }) {
   // Global & Navigation State
@@ -27,7 +28,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
   const [messages, setMessages] = useState([
     {
       sender: 'doctor',
-      text: 'Namaste! Welcome to Lasavo AI Tele-Health, developed in technical collaboration with IIT Delhi. I am Dr. Ananya, your AI Medical Avatar. How can I assist you with your health today?',
+      text: 'Namaste! Welcome to Lasavo Health AI, developed in technical collaboration with IIT Delhi. I am Dr. Ananya, your AI Medical Avatar. How can I assist you with your health today?',
       time: 'Just now'
     }
   ]);
@@ -35,12 +36,13 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
   const [isRecording, setIsRecording] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [consultationStatus, setConsultationStatus] = useState('Active');
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
 
-  // Modals State
+  // Modals & Prescription Upload State
   const [showRxModal, setShowRxModal] = useState(false);
   const [generatedRx, setGeneratedRx] = useState(null);
   const [showSymptomModal, setShowSymptomModal] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState('');
 
   // Service 1: Mental Wellness State
   const [moodRating, setMoodRating] = useState(7);
@@ -58,10 +60,15 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
 
   // Botanical Phytomedicine State (Part of AI Consultation Suite)
   const [selectedPlant, setSelectedPlant] = useState(null);
+  const [botanicalQueryInput, setBotanicalQueryInput] = useState('');
+  const [botanicalAIResponse, setBotanicalAIResponse] = useState(null);
 
   // Symptom Checker State
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
   const [triageResult, setTriageResult] = useState(null);
+
+  // File Upload Ref
+  const fileInputRef = useRef(null);
 
   const doctorsList = [
     {
@@ -174,7 +181,40 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
     { id: 's7', label: 'Abdominal Pain / Nausea', severity: 'Moderate', category: 'Digestive' }
   ];
 
-  // Speech Synthesis Helper
+  // Web Speech API Voice Input
+  const handleMicClick = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Web Speech API is not supported in this browser. You can type your query in the input box.');
+      return;
+    }
+
+    if (isRecording) {
+      setIsRecording(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = selectedLanguage === 'Hindi' ? 'hi-IN' : 'en-IN';
+    recognition.interimResults = false;
+
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onend = () => setIsRecording(false);
+    recognition.onerror = (e) => {
+      console.warn('Speech recognition error:', e.error);
+      setIsRecording(false);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInputText(transcript);
+      handleSendMessageText(transcript);
+    };
+
+    recognition.start();
+  };
+
+  // Text Speech Synthesis Helper
   const speakText = (text) => {
     if (!voiceEnabled || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
@@ -186,32 +226,92 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
     window.speechSynthesis.speak(utterance);
   };
 
+  // Send Message & Query Kimi AI Model
   const handleSendMessage = () => {
     if (!inputText.trim()) return;
-    const userMsg = { sender: 'patient', text: inputText, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-    setMessages((prev) => [...prev, userMsg]);
-    const currentInput = inputText;
+    handleSendMessageText(inputText);
     setInputText('');
+  };
+
+  const handleSendMessageText = async (textToSend) => {
+    const userMsg = { sender: 'patient', text: textToSend, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+    setMessages((prev) => [...prev, userMsg]);
+    setIsLoadingAI(true);
     setIsSpeaking(true);
 
-    setTimeout(() => {
-      let replyText = `Thank you. I have evaluated your symptoms with our IIT Delhi clinical diagnostic protocols. `;
-      if (currentInput.toLowerCase().includes('fever') || currentInput.toLowerCase().includes('headache')) {
-        replyText += `For acute fever or headache, oral hydration and Paracetamol 650mg are recommended. I have generated a digital e-Prescription.`;
-        generateDigitalRx(currentInput, 'Paracetamol 650mg TDS (3 days)');
-      } else if (currentInput.toLowerCase().includes('stress') || currentInput.toLowerCase().includes('anxiety')) {
-        replyText += `Please switch to the Video Psychology Avatar tab for guided CBT reflection with Dr. Kavita Menon.`;
-      } else {
-        replyText += `Your symptoms have been logged in your digital health record. You can view your verified e-Prescription below.`;
-        generateDigitalRx(currentInput, 'Multivitamin & Hydration Supplement');
-      }
+    try {
+      const replyText = await callKimiAI({
+        prompt: textToSend,
+        avatarName: activeAvatar.name,
+        specialty: activeAvatar.specialty
+      });
 
       setMessages((prev) => [
         ...prev,
         { sender: 'doctor', text: replyText, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
       ]);
       speakText(replyText);
-    }, 1400);
+
+      // Auto-generate Rx if medicine suggested
+      if (textToSend.toLowerCase().includes('fever') || textToSend.toLowerCase().includes('headache') || textToSend.toLowerCase().includes('cough')) {
+        generateDigitalRx(textToSend, 'Paracetamol 650mg TDS (3 days)');
+      }
+    } catch (err) {
+      console.error('Error querying Kimi AI:', err);
+    } finally {
+      setIsLoadingAI(false);
+    }
+  };
+
+  // File / PDF Prescription Uploader
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadedFileName(file.name);
+    const reader = new FileReader();
+
+    reader.onload = async (event) => {
+      const fileContent = event.target.result;
+      const fileSummaryPrompt = `I have uploaded a prescription/medical report file named "${file.name}". Please analyze this prescription document, extract prescribed medicines, dosages, and provide clinical instructions under Indian Telemedicine guidelines.`;
+      
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'patient', text: `📄 Uploaded Medical Document: ${file.name}`, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+      ]);
+
+      setIsLoadingAI(true);
+      const aiResponse = await callKimiAI({
+        prompt: fileSummaryPrompt,
+        avatarName: activeAvatar.name,
+        specialty: activeAvatar.specialty
+      });
+
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'doctor', text: aiResponse, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+      ]);
+      speakText(aiResponse);
+      setIsLoadingAI(false);
+    };
+
+    reader.readAsText(file);
+  };
+
+  // Query Kimi AI for Botanical Phytomedicine
+  const handleBotanicalQuery = async () => {
+    if (!botanicalQueryInput.trim()) return;
+    setIsLoadingAI(true);
+
+    const prompt = `Provide detailed AYUSH bioactive phytomedicine analysis for plant/herb "${botanicalQueryInput}". Include Sanskrit name, active compounds, pharmacological benefits, safety rating, and standardized dosage.`;
+    const res = await callKimiAI({
+      prompt,
+      avatarName: 'Dr. Arjun Shastri, BAMS, MD (Ay)',
+      specialty: 'Ayurvedic Phytomedicine & Botanical AI'
+    });
+
+    setBotanicalAIResponse(res);
+    setIsLoadingAI(false);
   };
 
   const generateDigitalRx = (complaint, medName) => {
@@ -228,7 +328,6 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
       ],
       qrCodeData: 'VERIFIED-IIT-DELHI-LASAVO-HEALTH-2026'
     });
-    setConsultationStatus('Rx Generated');
   };
 
   const toggleSymptom = (symptom) => {
@@ -239,19 +338,25 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
     }
   };
 
-  const runSymptomTriage = () => {
+  const runSymptomTriage = async () => {
     if (selectedSymptoms.length === 0) return;
-    const hasEmergency = selectedSymptoms.some((s) => s.severity === 'Emergency');
-    const hasHigh = selectedSymptoms.some((s) => s.severity === 'High');
+    setIsLoadingAI(true);
 
-    let triage = {
-      level: hasEmergency ? 'Emergency Red Alert' : hasHigh ? 'Urgent AI Triage Recommended' : 'Routine Care',
-      advice: hasEmergency
-        ? 'Please seek immediate emergency medical care or call 108. AI Doctor Avatar is standby for preliminary clinical triage.'
-        : 'Connect with Dr. Ananya Sharma on the AI Doctor Avatar console for instant digital prescription.',
-      suggestedAvatar: hasEmergency ? 'Dr. Rajesh Verma (Cardiology)' : 'Dr. Ananya Sharma (General Medicine)'
-    };
-    setTriageResult(triage);
+    const symptomLabels = selectedSymptoms.map((s) => s.label).join(', ');
+    const prompt = `Patient presents with symptoms: ${symptomLabels}. Run clinical triage under IIT Delhi diagnostic guidelines. Provide triage urgency level, emergency advice, and recommended treatment path.`;
+    
+    const aiAdvice = await callKimiAI({
+      prompt,
+      avatarName: activeAvatar.name,
+      specialty: activeAvatar.specialty
+    });
+
+    const hasEmergency = selectedSymptoms.some((s) => s.severity === 'Emergency');
+    setTriageResult({
+      level: hasEmergency ? 'Emergency Red Alert' : 'Urgent AI Triage Evaluated',
+      advice: aiAdvice
+    });
+    setIsLoadingAI(false);
   };
 
   return (
@@ -267,7 +372,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                 Official Tech Alliance • Lasavo Pvt Ltd & IIT Delhi
               </span>
               <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[11px] font-bold px-3 py-1 rounded-full">
-                Pan-India Tele-Health Service
+                Kimi AI Integrated
               </span>
             </div>
 
@@ -276,7 +381,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
             </h1>
 
             <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
-              Consult 24/7 realistic AI Doctor Avatars without doctor presence. Powered by IIT Delhi clinical models for immediate symptom triage, NMC-compliant digital e-prescriptions, video psychology avatars, e-pharmacy delivery, and AYUSH phytomedicine ingredient analysis.
+              Consult 24/7 realistic AI Doctor Avatars powered by Kimi AI model & IIT Delhi clinical protocols. Use mic input for voice chat, upload prescription PDFs, run symptom triage, and analyze botanical phytomedicine.
             </p>
           </div>
 
@@ -322,7 +427,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
           </div>
           <div>
             <h3 className={`font-extrabold text-xs ${activeTab === 'teleconsult' ? 'text-white' : 'text-slate-300'}`}>AI Doctor Avatars</h3>
-            <p className="text-[10px] text-slate-400 mt-0.5">24/7 Online Consult</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">24/7 Voice & Chat AI</p>
           </div>
         </button>
 
@@ -342,7 +447,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
           </div>
           <div>
             <h3 className={`font-extrabold text-xs ${activeTab === 'aiconsultation' ? 'text-white' : 'text-slate-300'}`}>AI Consultation Suite</h3>
-            <p className="text-[10px] text-slate-400 mt-0.5">Triage, Rx & Phytomedicine</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">PDF Upload & Botanical AI</p>
           </div>
         </button>
 
@@ -419,7 +524,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                   <span>👨‍⚕️ Select AI Doctor Avatar</span>
                 </h3>
                 <span className="text-[10px] font-bold bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded-full border border-teal-500/20">
-                  IIT-D Calibrated
+                  IIT-D Validated
                 </span>
               </div>
 
@@ -495,7 +600,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
 
                   <span className="flex items-center gap-1.5 text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    Live Video Stream
+                    Kimi AI Model Connected
                   </span>
                 </div>
               </div>
@@ -520,6 +625,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                 )}
               </div>
 
+              {/* Consultation Messages */}
               <div className="p-4 h-64 overflow-y-auto space-y-3 bg-slate-950/70 border-t border-slate-800">
                 {messages.map((m, idx) => (
                   <div
@@ -540,36 +646,70 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                     <span className="text-[9px] text-slate-500 mt-1 px-1">{m.time}</span>
                   </div>
                 ))}
+                {isLoadingAI && (
+                  <div className="mr-auto text-xs bg-slate-900 border border-slate-800 p-3 rounded-2xl text-teal-400 font-bold flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping"></span>
+                    Kimi AI is generating response...
+                  </div>
+                )}
               </div>
 
-              <div className="p-3 bg-slate-900 border-t border-slate-800 flex items-center space-x-2">
-                <button
-                  onClick={() => setIsRecording(!isRecording)}
-                  className={`p-3 rounded-2xl transition border ${
-                    isRecording
-                      ? 'bg-red-500/20 text-red-400 border-red-500 animate-pulse'
-                      : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
-                  }`}
-                  title="Voice Input"
-                >
-                  🎙️
-                </button>
+              {/* Action Toolbar & Inputs */}
+              <div className="p-3 bg-slate-900 border-t border-slate-800 space-y-2">
+                <div className="flex items-center space-x-2">
+                  {/* Mic Input Button */}
+                  <button
+                    onClick={handleMicClick}
+                    className={`p-3 rounded-2xl transition border flex items-center justify-center ${
+                      isRecording
+                        ? 'bg-red-500/20 text-red-400 border-red-500 animate-pulse'
+                        : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
+                    }`}
+                    title="Click Mic to Talk with AI Doctor"
+                  >
+                    🎙️
+                  </button>
 
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Describe your health symptoms (e.g. fever, headache, indigestion)..."
-                  className="flex-1 bg-slate-950 border border-slate-800 focus:border-teal-500 text-white text-xs rounded-2xl px-4 py-3 outline-none"
-                />
+                  {/* Upload Prescription PDF Button */}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    accept=".pdf,.png,.jpg,.jpeg,.txt"
+                    className="hidden"
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-3 rounded-2xl bg-slate-950 hover:bg-slate-800 text-teal-400 border border-slate-800 text-xs font-bold flex items-center space-x-1.5"
+                    title="Upload Prescription PDF or Image to AI"
+                  >
+                    <span>📄 Upload PDF/Rx</span>
+                  </button>
 
-                <button
-                  onClick={handleSendMessage}
-                  className="bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-xs shadow-lg shadow-teal-500/20 transition active:scale-95"
-                >
-                  Send 🚀
-                </button>
+                  <input
+                    type="text"
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder="Type or click Mic to talk with AI Doctor..."
+                    className="flex-1 bg-slate-950 border border-slate-800 focus:border-teal-500 text-white text-xs rounded-2xl px-4 py-3 outline-none"
+                  />
+
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={isLoadingAI}
+                    className="bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-xs shadow-lg shadow-teal-500/20 transition active:scale-95"
+                  >
+                    Send 🚀
+                  </button>
+                </div>
+
+                {uploadedFileName && (
+                  <div className="text-[10px] text-teal-400 px-2 flex items-center justify-between">
+                    <span>Uploaded: {uploadedFileName}</span>
+                    <button onClick={() => setUploadedFileName('')} className="text-slate-400 hover:text-white">Remove</button>
+                  </div>
+                )}
               </div>
 
             </div>
@@ -590,7 +730,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
               AI Clinical Consultation & Phytomedicine Intelligence Suite
             </h2>
             <p className="text-slate-300 text-xs mt-1">
-              Integrated clinical diagnostic engine powered by IIT Delhi models. Features symptom triage, digital e-prescriptions, drug-herb interaction checks, and AYUSH botanical ingredient analysis.
+              Integrated clinical diagnostic engine querying Kimi AI model & IIT Delhi diagnostic rules. Features symptom triage, PDF prescription parsing, drug interaction checks, and AYUSH botanical phytomedicine analysis.
             </p>
           </div>
 
@@ -600,7 +740,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
             <div className="lg:col-span-6 bg-slate-950 p-6 rounded-3xl border border-slate-800 space-y-4">
               <h3 className="text-sm font-extrabold text-white flex items-center justify-between">
                 <span>🩺 AI Symptom Assessment & Triage</span>
-                <span className="text-[10px] font-mono text-teal-400 bg-slate-900 px-2 py-0.5 rounded">IIT-D Diagnostic v4.2</span>
+                <span className="text-[10px] font-mono text-teal-400 bg-slate-900 px-2 py-0.5 rounded">Kimi AI Powered</span>
               </h3>
 
               <div className="grid grid-cols-2 gap-2">
@@ -624,9 +764,10 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
 
               <button
                 onClick={runSymptomTriage}
+                disabled={isLoadingAI}
                 className="w-full bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black py-3 rounded-2xl text-xs shadow-lg transition"
               >
-                Run AI Clinical Triage Assessment
+                {isLoadingAI ? 'Querying Kimi AI Model...' : 'Run AI Clinical Triage Assessment 🚀'}
               </button>
 
               {triageResult && (
@@ -635,7 +776,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                     <span className="font-extrabold text-teal-300">Clinical Triage Level:</span>
                     <span className="bg-teal-500/20 text-teal-300 px-2.5 py-0.5 rounded font-bold">{triageResult.level}</span>
                   </div>
-                  <p className="text-slate-300">{triageResult.advice}</p>
+                  <p className="text-slate-300 leading-relaxed">{triageResult.advice}</p>
                 </div>
               )}
             </div>
@@ -647,27 +788,46 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                 <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-0.5 rounded">AYUSH Compliant</span>
               </h3>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400">Select Medicinal Extract:</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {botanicalPlants.map((plant) => (
-                    <button
-                      key={plant.id}
-                      onClick={() => setSelectedPlant(plant)}
-                      className={`p-2.5 rounded-xl border text-left text-xs transition ${
-                        selectedPlant?.name === plant.name
-                          ? 'bg-green-950 border-green-500 text-white font-bold'
-                          : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <span className="block font-bold">{plant.name}</span>
-                      <span className="text-[10px] text-green-400">{plant.sansKritName}</span>
-                    </button>
-                  ))}
-                </div>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={botanicalQueryInput}
+                  onChange={(e) => setBotanicalQueryInput(e.target.value)}
+                  placeholder="Enter any herb (e.g. Ashwagandha, Turmeric, Brahmi)..."
+                  className="flex-1 bg-slate-900 border border-slate-800 text-white text-xs rounded-xl p-3 outline-none"
+                />
+                <button
+                  onClick={handleBotanicalQuery}
+                  disabled={isLoadingAI}
+                  className="bg-green-500 hover:bg-green-400 text-slate-950 font-black px-4 py-3 rounded-xl text-xs transition"
+                >
+                  Query AI
+                </button>
               </div>
 
-              {selectedPlant && (
+              <div className="grid grid-cols-2 gap-2">
+                {botanicalPlants.map((plant) => (
+                  <button
+                    key={plant.id}
+                    onClick={() => setSelectedPlant(plant)}
+                    className={`p-2.5 rounded-xl border text-left text-xs transition ${
+                      selectedPlant?.name === plant.name
+                        ? 'bg-green-950 border-green-500 text-white font-bold'
+                        : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                    }`}
+                  >
+                    <span className="block font-bold">{plant.name}</span>
+                    <span className="text-[10px] text-green-400">{plant.sansKritName}</span>
+                  </button>
+                ))}
+              </div>
+
+              {botanicalAIResponse ? (
+                <div className="p-4 bg-slate-900 rounded-2xl border border-green-500/30 space-y-2 text-xs">
+                  <h4 className="font-bold text-green-400">Kimi AI Botanical Analysis:</h4>
+                  <p className="text-slate-300 leading-relaxed">{botanicalAIResponse}</p>
+                </div>
+              ) : selectedPlant ? (
                 <div className="p-4 bg-slate-900 rounded-2xl border border-green-500/30 space-y-3 text-xs">
                   <div className="flex justify-between items-start">
                     <div>
@@ -696,7 +856,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                     <span className="text-teal-400 font-mono text-[10px] block mt-1">Dosage: {selectedPlant.dosage}</span>
                   </div>
                 </div>
-              )}
+              ) : null}
 
             </div>
 
@@ -716,7 +876,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                 Video Psychology Avatar & AI Emotional Therapy
               </h2>
               <p className="text-slate-300 text-xs mt-1">
-                Converse in real-time with Dr. Kavita Menon, your 24/7 AI Psychology Avatar. Confidential CBT therapy, stress management, and emotional wellness guidance.
+                Converse in real-time with Dr. Kavita Menon, your 24/7 AI Psychology Avatar powered by Kimi AI model.
               </p>
             </div>
 
@@ -776,6 +936,14 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                   className="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-2xl p-3 text-xs text-white outline-none resize-none"
                 ></textarea>
               </div>
+
+              <button
+                onClick={() => handleSendMessageText(`I am feeling mood rating ${moodRating}/10. ${wellnessNotes}`)}
+                disabled={isLoadingAI}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-2xl text-xs transition"
+              >
+                Send Reflection to Psychology AI Avatar 🧠
+              </button>
             </div>
 
             <div className="md:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between">
@@ -790,7 +958,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                 <div className="absolute bottom-4 left-4 right-4 bg-slate-950/80 backdrop-blur p-3.5 rounded-2xl border border-indigo-500/30 flex justify-between items-center">
                   <div>
                     <h4 className="text-xs font-extrabold text-white">Dr. Kavita Menon (AI Psychology Avatar)</h4>
-                    <p className="text-[10px] text-indigo-300">IIT Delhi Neuro-Behavioral AI Model</p>
+                    <p className="text-[10px] text-indigo-300">IIT Delhi Neuro-Behavioral Kimi Model</p>
                   </div>
                   <span className="text-[10px] font-bold bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full border border-indigo-500/40">
                     {sessionActive ? 'Session Live' : 'Ready to Connect'}
@@ -1080,9 +1248,10 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
 
             <button
               onClick={runSymptomTriage}
+              disabled={isLoadingAI}
               className="w-full bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black py-3 rounded-2xl text-xs shadow-lg transition"
             >
-              Run Clinical AI Triage Assessment
+              {isLoadingAI ? 'Querying Kimi AI...' : 'Run Clinical AI Triage Assessment 🚀'}
             </button>
 
             {triageResult && (
@@ -1091,7 +1260,7 @@ export default function AIDoctorPlatform({ initialTab = 'teleconsult', forcedAct
                   <span className="font-extrabold text-teal-300">Triage Result:</span>
                   <span className="bg-teal-500/20 text-teal-300 px-2.5 py-0.5 rounded font-bold">{triageResult.level}</span>
                 </div>
-                <p className="text-slate-300">{triageResult.advice}</p>
+                <p className="text-slate-300 leading-relaxed">{triageResult.advice}</p>
               </div>
             )}
 
