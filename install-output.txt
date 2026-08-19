@@ -1,0 +1,131 @@
+﻿node.exe : npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm warn deprec...ception instead:String) [], RemoteExcepti 
+   on
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm warn cleanup Failed to remove some directories [
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\tinyglobby',
+npm warn cleanup     [Error: EPERM: operation not permitted, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\tinyglobby\node_modules\picomatch'] {
+npm warn cleanup       errno: -4048,
+npm warn cleanup       code: 'EPERM',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\tinyglobby\\node_modules\\picomatch'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\caniuse-lite',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\caniuse-lite\data\regions'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\caniuse-lite\\data\\regions'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna Bhatia\\Downloads\\lasavo-school\\node_modules\\openai',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\openai\internal\qs'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\openai\\internal\\qs'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna Bhatia\\Downloads\\lasavo-school\\node_modules',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\caniuse-lite\data\regions'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\caniuse-lite\\data\\regions'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@firebase',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\@firebase\firestore\dist\firestore\lite'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@firebase\\firestore\\dist\\firestore\\lite'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@firebase\\firestore',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\@firebase\firestore\dist\firestore\src\api'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@firebase\\firestore\\dist\\firestore\\src\\api'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna Bhatia\\Downloads\\lasavo-school\\node_modules\\firebase',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\firebase\compat\installations\dist\app'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\firebase\\compat\\installations\\dist\\app'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@grpc\\grpc-js',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\@grpc\grpc-js\src'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@grpc\\grpc-js\\src'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna Bhatia\\Downloads\\lasavo-school\\node_modules\\@grpc',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna 
+Bhatia\Downloads\lasavo-school\node_modules\@grpc\grpc-js\src'] {
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@grpc\\grpc-js\\src'
+npm warn cleanup     }
+npm warn cleanup   ],
+npm warn cleanup   [
+npm warn cleanup     '\\\\?\\C:\\Users\\Chetna 
+Bhatia\\Downloads\\lasavo-school\\node_modules\\@firebase\\auth-compat',
+npm warn cleanup     [Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Chetna Bhatia\Downloads\lasa
+vo-school\node_modules\@firebase\auth-compat\node_modules\@firebase\auth\dist\test\helpers\integration'] 
+{
+npm warn cleanup       errno: -4051,
+npm warn cleanup       code: 'ENOTEMPTY',
+npm warn cleanup       syscall: 'rmdir',
+npm warn cleanup       path: 'C:\\Users\\Chetna Bhatia\\Downloads\\lasavo-school\\node_modules\\@firebase
+\\auth-compat\\node_modules\\@firebase\\auth\\dist\\test\\helpers\\integration'
+npm warn cleanup     }
+npm warn cleanup   ]
+npm warn cleanup ]
+npm error code EIDLETIMEOUT
+npm error Idle timeout reached for host `registry.npmjs.org:443`
+npm error A complete log of this run can be found in: C:\Users\Chetna 
+Bhatia\AppData\Local\npm-cache\_logs\2026-08-09T09_44_12_791Z-debug-0.log
