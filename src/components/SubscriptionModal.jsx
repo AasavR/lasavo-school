@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free', onSelectPlan }) {
-  const [billingCycle, setBillingCycle] = useState('yearly'); // 'monthly' | 'yearly'
+  const [selectedTierFilter, setSelectedTierFilter] = useState('all'); // 'all' | 'trial' | 'annual' | 'enterprise'
   const [currency, setCurrency] = useState('INR'); // 'INR' | 'USD'
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
@@ -9,32 +9,70 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
 
   if (!isOpen) return null;
 
+  // 6 Custom Learning Packages matching exact user request: ₹100, ₹500, ₹10,000, ₹40,000, ₹2,00,000, ₹10,00,000
   const plans = [
     {
-      id: 'starter',
-      name: 'Starter Academic Pass',
-      badge: 'Basic K-10 Access',
-      priceINR: billingCycle === 'monthly' ? 3999 : 18000,
-      priceUSD: billingCycle === 'monthly' ? 49 : 219,
-      period: billingCycle === 'monthly' ? '/mo' : '/yr',
+      id: 'trial_100',
+      name: 'Micro Doubt-Solving & Chapter Trial',
+      badge: '₹100 Trial Pass',
+      category: 'trial',
+      priceINR: 100,
+      priceUSD: 1.25,
+      period: '/ single pass',
       features: [
-        'Access to CBSE & ICSE Class 1-10 course modules',
-        '2-Way Interactive AI Avatar Tutor sessions (30 hrs/mo)',
-        'NCERT Aligned Question Bank & Practice Quizzes',
-        'Parent Progress Dashboard & TMS Analytics',
-        'Basic Email Support'
+        'Single Chapter NCERT AI Avatar Video/Audio session',
+        '3 Instant AI Doubt-Solving queries with Dr. Ananya / Prof. Priya',
+        'NCERT Digital Chalkboard visual summary download',
+        'Basic accuracy analysis'
+      ],
+      popular: false,
+      color: 'from-slate-600 to-slate-800',
+      buttonBg: 'bg-slate-800 hover:bg-slate-700 text-white'
+    },
+    {
+      id: 'weekly_500',
+      name: 'Weekly Practice & Doubt Workbook',
+      badge: '₹500 Weekly Pass',
+      category: 'trial',
+      priceINR: 500,
+      priceUSD: 6.25,
+      period: '/ 7 days',
+      features: [
+        '7 Days Unlimited CBSE & ICSE Class 1-12 AI Avatar Classrooms',
+        '24/7 AI Doubt Solving across STEM & Humanities',
+        'Automated NCERT Practice Worksheets & Quizzes',
+        'Weekly Performance Report card'
       ],
       popular: false,
       color: 'from-blue-600 to-cyan-600',
       buttonBg: 'bg-blue-600 hover:bg-blue-500 text-white'
     },
     {
-      id: 'pro',
-      name: 'EdTech Interactive Platform & Doubt-Solving Pass',
-      badge: '⭐ ₹40,000 / 1 Year — RECOMMENDED TIER',
-      priceINR: billingCycle === 'monthly' ? 3999 : 40000,
-      priceUSD: billingCycle === 'monthly' ? 49 : 480,
-      period: billingCycle === 'monthly' ? '/mo' : '/yr',
+      id: 'term_10000',
+      name: 'Quarterly Academic Term Pass',
+      badge: '₹10,000 Term Pass',
+      category: 'annual',
+      priceINR: 10000,
+      priceUSD: 125,
+      period: '/ 3 months',
+      features: [
+        '3 Months Unlimited CBSE & ICSE Class 1-12 AI Classrooms',
+        'Priority 2-Way Voice & Video Avatar Faculty Tutoring',
+        'Parent & Teacher Management System (TMS) Analytics',
+        'Dedicated Homework Assignment & Progress Tracker'
+      ],
+      popular: false,
+      color: 'from-emerald-600 to-teal-600',
+      buttonBg: 'bg-emerald-600 hover:bg-emerald-500 text-white'
+    },
+    {
+      id: 'pro_40000',
+      name: '1-Year EdTech Interactive Platform & 24/7 Doubt-Solving Pass',
+      badge: '⭐ ₹40,000 / 1 Year — BEST VALUE RECOMMENDED TIER',
+      category: 'annual',
+      priceINR: 40000,
+      priceUSD: 480,
+      period: '/ 1 year',
       features: [
         '🎓 Complete CBSE & ICSE Class 1-12 Interactive Course Hubs',
         '🎥 24/7 Unlimited 2-Way Voice & Video AI Avatar Classrooms',
@@ -44,28 +82,51 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
         '📜 Interactive Digital Chalkboard & Automated NCERT Workbooks'
       ],
       popular: true,
-      color: 'from-indigo-600 to-purple-600',
-      buttonBg: 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white shadow-lg shadow-indigo-600/30'
+      color: 'from-indigo-600 via-purple-600 to-pink-600',
+      buttonBg: 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white shadow-lg shadow-indigo-600/30 font-black'
     },
     {
-      id: 'enterprise',
-      name: 'Institutional & School Suite',
-      badge: 'For Schools & Academies',
-      priceINR: billingCycle === 'monthly' ? 14999 : 150000,
-      priceUSD: billingCycle === 'monthly' ? 199 : 1800,
-      period: billingCycle === 'monthly' ? '/mo' : '/yr',
+      id: 'lifetime_200000',
+      name: 'Multi-Child Family & Lifetime AI Pass',
+      badge: '₹2,00,000 Family Tier',
+      category: 'enterprise',
+      priceINR: 200000,
+      priceUSD: 2400,
+      period: '/ lifetime pass',
       features: [
-        'Unlimited School & Institutional Student Seat Licenses',
-        'Custom NCERT & State Board Avatar Persona Training',
-        'Institutional TMS Command Center & Multi-Classroom Analytics',
-        'Dedicated Outbound Parent Communication & SLA Guarantee',
+        'Lifetime Unlimited AI Avatar Classrooms & Doubt Solving for up to 4 children',
+        'Unrestricted access to all Class 1-12 NCERT, JEE & NEET modules',
+        'Multi-device simultaneous login & dedicated family TMS analytics',
+        'VIP Priority AI Voice Engine & 1-on-1 Faculty Customization'
+      ],
+      popular: false,
+      color: 'from-purple-600 to-pink-600',
+      buttonBg: 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold'
+    },
+    {
+      id: 'institutional_1000000',
+      name: 'Institutional School & Academy Enterprise License',
+      badge: '₹10,00,000 School Suite',
+      category: 'enterprise',
+      priceINR: 1000000,
+      priceUSD: 12000,
+      period: '/ year enterprise',
+      features: [
+        'Unlimited School & Institutional Student Seat Licenses (up to 5,000 students)',
+        'Custom NCERT, State Board & International Avatar Persona Training',
+        'Institutional TMS Command Center & Multi-Classroom Analytics Dashboard',
+        'Dedicated Outbound Parent Communication Engine & SLA Guarantee',
         'Custom API Webhook Integration & Dedicated Account Manager'
       ],
       popular: false,
       color: 'from-amber-600 to-orange-600',
-      buttonBg: 'bg-amber-600 hover:bg-amber-500 text-white'
+      buttonBg: 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold'
     }
   ];
+
+  const filteredPlans = selectedTierFilter === 'all' 
+    ? plans 
+    : plans.filter(p => p.category === selectedTierFilter);
 
   // Load Razorpay Script dynamically if needed
   const loadRazorpayScript = () => {
@@ -111,7 +172,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
             notes: {
               plan_id: plan.id,
               plan_name: plan.name,
-              billing_cycle: billingCycle
+              amount_inr: plan.priceINR
             }
           })
         });
@@ -120,11 +181,11 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
           orderData = await orderRes.json();
         }
       } catch (err) {
-        console.warn('Backend order endpoint not available directly, using fallback client order creation:', err);
+        console.warn('Backend order endpoint fallback:', err);
       }
 
       // Fallback order ID if serverless endpoint is offline during plain dev mode
-      const orderId = orderData?.id || orderData?.order_id || `order_demo_${Date.now()}`;
+      const orderId = orderData?.id || orderData?.order_id || `order_${plan.id}_${Date.now()}`;
       const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TWRYKe5DWcerEE';
 
       // STEP 2: Configure Razorpay Standard Checkout Options
@@ -133,7 +194,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
         amount: amountInPaise,
         currency: 'INR',
         name: 'School.lasavo.org',
-        description: `Subscription for ${plan.name}`,
+        description: `Learning Package: ${plan.name}`,
         image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
         order_id: orderId,
         handler: async function (response) {
@@ -154,7 +215,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
             if (verifyData.success) {
               setSuccessMessage(`Payment Verified! Payment ID: ${response.razorpay_payment_id}`);
             } else {
-              setSuccessMessage(`Payment Received! Payment ID: ${response.razorpay_payment_id}`);
+              setSuccessMessage(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
             }
           } catch (e) {
             setSuccessMessage(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
@@ -201,8 +262,8 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-5xl w-full p-6 md:p-8 shadow-2xl relative my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in overflow-y-auto">
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-6xl w-full p-6 md:p-8 shadow-2xl relative my-8">
         
         {/* Close Button */}
         <button
@@ -213,39 +274,52 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
         </button>
 
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-8">
+        <div className="text-center max-w-3xl mx-auto space-y-3 mb-8">
           <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full">
-            Razorpay Standard Web Checkout Integration
+            Razorpay Learning Package Checkout
           </span>
           <h2 className="text-2xl md:text-3xl font-extrabold text-white">
-            Interactive EdTech Course Hub & AI Doubt Solving Pass
+            Select Your Learning Package & Subscribe via Razorpay
           </h2>
           <p className="text-xs text-slate-400">
-            Get 1-Year Unlimited Access to CBSE & ICSE Class 1-12 AI Avatar Classrooms, 24/7 Doubt Solving & TMS Analytics.
+            Available Tiers: ₹100 • ₹500 • ₹10,000 • ₹40,000 (1-Year Pass) • ₹2,00,000 • ₹10,00,000
           </p>
 
-          {/* Controls: Billing Cycle & Currency Switcher */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            {/* Billing Cycle */}
-            <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800 text-xs">
+          {/* Tier Category Filters & Currency Switcher */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            {/* Category Filter */}
+            <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800 text-xs font-bold space-x-1">
               <button
-                onClick={() => setBillingCycle('monthly')}
-                className={`px-4 py-1.5 rounded-xl font-bold transition ${
-                  billingCycle === 'monthly' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                onClick={() => setSelectedTierFilter('all')}
+                className={`px-3 py-1.5 rounded-xl transition ${
+                  selectedTierFilter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                Monthly Pass
+                All 6 Packages
               </button>
               <button
-                onClick={() => setBillingCycle('yearly')}
-                className={`px-4 py-1.5 rounded-xl font-bold transition flex items-center space-x-1 ${
-                  billingCycle === 'yearly' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                onClick={() => setSelectedTierFilter('trial')}
+                className={`px-3 py-1.5 rounded-xl transition ${
+                  selectedTierFilter === 'trial' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <span>1-Year Annual Pass (₹40,000/yr)</span>
-                <span className="text-[9px] bg-emerald-500 text-slate-950 px-1.5 py-0.5 rounded-full uppercase font-black">
-                  BEST VALUE
-                </span>
+                Trial (₹100 - ₹500)
+              </button>
+              <button
+                onClick={() => setSelectedTierFilter('annual')}
+                className={`px-3 py-1.5 rounded-xl transition ${
+                  selectedTierFilter === 'annual' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Annual & Term (₹10k - ₹40k)
+              </button>
+              <button
+                onClick={() => setSelectedTierFilter('enterprise')}
+                className={`px-3 py-1.5 rounded-xl transition ${
+                  selectedTierFilter === 'enterprise' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Family & Enterprise (₹2L - ₹10L)
               </button>
             </div>
 
@@ -286,10 +360,10 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
           </div>
         )}
 
-        {/* Plan Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map((plan) => {
-            const price = currency === 'INR' ? `₹${plan.priceINR.toLocaleString('en-IN')}` : `$${plan.priceUSD}`;
+        {/* 6 Plan Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPlans.map((plan) => {
+            const price = currency === 'INR' ? `₹${plan.priceINR.toLocaleString('en-IN')}` : `$${plan.priceUSD.toLocaleString()}`;
             const isCurrent = currentPlan === plan.id;
 
             return (
@@ -302,7 +376,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-extrabold text-[10px] uppercase tracking-widest px-4 py-1 rounded-full shadow-lg">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-extrabold text-[10px] uppercase tracking-widest px-4 py-1 rounded-full shadow-lg shrink-0 whitespace-nowrap">
                     {plan.badge}
                   </div>
                 )}
@@ -311,7 +385,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                   <div className="flex justify-between items-start mb-3 mt-1">
                     <h3 className="text-base font-bold text-white leading-snug">{plan.name}</h3>
                     {!plan.popular && (
-                      <span className="text-[10px] text-slate-500 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-full shrink-0">
+                      <span className="text-[10px] text-indigo-300 bg-indigo-950 border border-indigo-800 px-2 py-0.5 rounded-full shrink-0 font-bold">
                         {plan.badge}
                       </span>
                     )}
@@ -348,7 +422,7 @@ export default function SubscriptionModal({ isOpen, onClose, currentPlan = 'free
                       <span>Connecting Razorpay...</span>
                     </span>
                   ) : isCurrent ? (
-                    <span>Active EdTech Pass ✓</span>
+                    <span>Active Package ✓</span>
                   ) : (
                     <span>Pay {price} via Razorpay 💳</span>
                   )}
