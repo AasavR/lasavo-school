@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { generateAITeacherResponse } from '../services/aiTeacherEngine';
-import { TEACHERS_LIST } from '../data/curriculumData';
+import { TEACHERS_LIST, TEACHERS_MAP, DAILY_6_CLASS_SCHEDULE } from '../data/curriculumData';
 
 export default function AIAvatarClassroom({ 
   selectedSubject, 
@@ -11,6 +11,11 @@ export default function AIAvatarClassroom({
 }) {
   const [activeTeacher, setActiveTeacher] = useState(initialTeacher || TEACHERS_LIST[0]);
   const [streamMode, setStreamMode] = useState('video'); // 'video' | 'audio'
+  const [activeClassNumber, setActiveClassNumber] = useState(1);
+
+  // 1-Hour Session Timer (3600 seconds)
+  const [secondsRemaining, setSecondsRemaining] = useState(3600);
+  const [isTimerRunning, setIsTimerRunning] = useState(true);
 
   // Classroom dialogue & state
   const [chatHistory, setChatHistory] = useState([]);
@@ -24,6 +29,27 @@ export default function AIAvatarClassroom({
   const [speechText, setSpeechText] = useState('');
   const recognitionRef = useRef(null);
   const chatEndRef = useRef(null);
+
+  // 1-Hour Countdown Timer effect
+  useEffect(() => {
+    let interval = null;
+    if (isTimerRunning && secondsRemaining > 0) {
+      interval = setInterval(() => {
+        setSecondsRemaining(prev => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning, secondsRemaining]);
+
+  // Format seconds as MM:SS
+  const formatTime = (secs) => {
+    const mins = Math.floor(secs / 60);
+    const remainderSecs = secs % 60;
+    return `${mins.toString().padStart(2, '0')}:${remainderSecs.toString().padStart(2, '0')}`;
+  };
+
+  // Calculate percentage of 1-hour class completed
+  const progressPercent = Math.min(100, Math.round(((3600 - secondsRemaining) / 3600) * 100));
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -61,7 +87,8 @@ export default function AIAvatarClassroom({
 
   // Initial Class Greeting
   useEffect(() => {
-    const greeting = `Welcome ${userProfile.studentName}! I am ${activeTeacher.name}. Today we are exploring ${selectedChapter?.title || 'our NCERT module'}. Feel free to ask me anything or answer my prompts!`;
+    const chapterName = selectedChapter?.title || DAILY_6_CLASS_SCHEDULE[activeClassNumber - 1]?.chapterTitle || 'today\'s NCERT topic';
+    const greeting = `Welcome ${userProfile.studentName}! I am ${activeTeacher.name}. Today we are leading Class ${activeClassNumber} of 6 for today's 1-hour session on "${chapterName}". Feel free to ask any question—I will answer you and guide us back to today's topic so we complete our syllabus goals on time!`;
     
     setChatHistory([
       { role: 'assistant', content: greeting, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -70,11 +97,19 @@ export default function AIAvatarClassroom({
     if (!voiceMuted) {
       speakText(greeting, activeTeacher);
     }
-  }, [selectedChapter, activeTeacher]);
+  }, [selectedChapter, activeTeacher, activeClassNumber]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory, isLoading]);
+
+  // Handle Switching between Daily 6 Classes
+  const handleSelectDailyClass = (classItem) => {
+    setActiveClassNumber(classItem.classNumber);
+    const assignedTeacher = TEACHERS_MAP[classItem.teacherId] || TEACHERS_LIST[0];
+    setActiveTeacher(assignedTeacher);
+    setSecondsRemaining(3600); // Reset 1-hour session timer
+  };
 
   // Realistic Voice Synthesis with Diction & Gender Tuning
   const speakText = (text, teacherObj = activeTeacher) => {
@@ -93,7 +128,6 @@ export default function AIAvatarClassroom({
     const utterance = new SpeechSynthesisUtterance(cleanedText);
     const voices = window.speechSynthesis.getVoices();
 
-    // Filter voice based on teacher gender and accent
     let selectedVoice = null;
     if (teacherObj.gender === 'male') {
       selectedVoice = voices.find(v => (v.lang.includes('en-IN') || v.lang.includes('hi-IN')) && v.name.toLowerCase().includes('male')) ||
@@ -101,7 +135,7 @@ export default function AIAvatarClassroom({
                       voices.find(v => v.name.toLowerCase().includes('male')) ||
                       voices[0];
     } else {
-      selectedVoice = voices.find(v => (v.lang.includes('en-IN') || v.lang.includes('hi-IN')) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('heera'))) ||
+      selectedVoice = voices.find(v => (v.lang.includes('en-IN') || v.lang.includes('hi-IN')) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira'))) ||
                       voices.find(v => v.lang.includes('en-IN')) ||
                       voices.find(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('samantha')) ||
                       voices[0];
@@ -109,14 +143,12 @@ export default function AIAvatarClassroom({
 
     if (selectedVoice) utterance.voice = selectedVoice;
 
-    // Pitch, Tempo (Rate), & Tenor
     utterance.pitch = teacherObj.voicePitch || (teacherObj.gender === 'male' ? 0.85 : 1.1);
     utterance.rate = teacherObj.voiceRate || 0.92;
     utterance.volume = 1.0;
 
     utterance.onstart = () => {
       setIsSpeaking(true);
-      // Ensure mic is stopped when AI starts speaking
       if (isListening && recognitionRef.current) {
         try { recognitionRef.current.stop(); } catch (e) {}
         setIsListening(false);
@@ -129,7 +161,7 @@ export default function AIAvatarClassroom({
   };
 
   const handleVoiceToggle = () => {
-    if (isSpeaking) return; // Prevent mic from turning on while AI is speaking
+    if (isSpeaking) return;
 
     if (!recognitionRef.current) {
       alert("Speech recognition is not supported in this browser. Please type your response!");
@@ -161,22 +193,21 @@ export default function AIAvatarClassroom({
     setChatHistory(prev => [...prev, { role: 'user', content: userText, timestamp: timeStr }]);
     setIsLoading(true);
 
-    // Stop mic if running
     if (isListening && recognitionRef.current) {
       try { recognitionRef.current.stop(); } catch (e) {}
       setIsListening(false);
     }
 
     try {
-      // Invoke AI model response tailored directly to student's turn
+      const currentSchedule = DAILY_6_CLASS_SCHEDULE[activeClassNumber - 1];
       const aiReply = await generateAITeacherResponse({
         userPrompt: userText,
         teacher: activeTeacher,
-        subject: selectedSubject,
-        chapter: selectedChapter,
+        subject: selectedSubject || { subjectName: currentSchedule?.subject || 'Science' },
+        chapter: selectedChapter || { title: currentSchedule?.chapterTitle || 'NCERT Class Module' },
         studentName: userProfile.studentName,
         chatHistory: chatHistory,
-        currentStimulus: selectedChapter?.stimulusQuestion
+        currentStimulus: selectedChapter?.stimulusQuestion || null
       });
 
       setChatHistory(prev => [
@@ -186,7 +217,7 @@ export default function AIAvatarClassroom({
       speakText(aiReply, activeTeacher);
     } catch (err) {
       console.error("AI Response Error:", err);
-      const fallbackReply = `I hear you, ${userProfile.studentName}! Let's examine this concept together from another angle.`;
+      const fallbackReply = `Great question ${userProfile.studentName}! Let's answer this and navigate back to today's topic on our chalkboard.`;
       setChatHistory(prev => [
         ...prev,
         { role: 'assistant', content: fallbackReply, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -198,8 +229,9 @@ export default function AIAvatarClassroom({
   };
 
   return (
-    <div className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 space-y-4 flex flex-col h-[calc(100vh-90px)] min-h-[680px]">
-      {/* Sleek Header Bar */}
+    <div className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 space-y-4 flex flex-col min-h-[720px]">
+      
+      {/* Sleek Header Bar with 1-Hour Timer */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl px-4 py-3 flex flex-wrap justify-between items-center gap-3 shrink-0 shadow-lg">
         <div className="flex items-center space-x-3">
           <button
@@ -209,15 +241,30 @@ export default function AIAvatarClassroom({
             ← Back to Syllabus
           </button>
           <div>
-            <h2 className="text-sm font-bold text-white">
-              {selectedChapter?.title || 'NCERT Interactive Classroom'}
+            <h2 className="text-sm font-bold text-white flex items-center space-x-2">
+              <span>{selectedChapter?.title || DAILY_6_CLASS_SCHEDULE[activeClassNumber - 1]?.chapterTitle}</span>
+              <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-extrabold uppercase">
+                Class {activeClassNumber} of 6 Today
+              </span>
             </h2>
-            <p className="text-[11px] text-indigo-400 font-medium">{selectedChapter?.ncertRef}</p>
+            <p className="text-[11px] text-slate-400 font-medium">
+              NCERT CBSE & ICSE Aligned • 1-Hour Interactive Session
+            </p>
           </div>
         </div>
 
-        {/* Clean Mode Toggle */}
-        <div className="flex items-center space-x-2">
+        {/* 1-Hour Live Countdown Timer & Mode Controls */}
+        <div className="flex items-center space-x-3">
+          {/* 1-Hour Countdown Timer */}
+          <div className="bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-xl flex items-center space-x-2">
+            <span className="text-xs text-slate-400">⏱️ Session Timer:</span>
+            <span className="font-mono font-black text-amber-400 text-sm">{formatTime(secondsRemaining)}</span>
+            <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded">
+              {progressPercent}% Complete
+            </span>
+          </div>
+
+          {/* Mode Controls */}
           <button
             onClick={() => setStreamMode(streamMode === 'video' ? 'audio' : 'video')}
             className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-xl text-xs font-bold transition flex items-center space-x-1.5"
@@ -234,6 +281,41 @@ export default function AIAvatarClassroom({
           >
             {voiceMuted ? '🔇 Audio Muted' : '🔊 Voice Sound On'}
           </button>
+        </div>
+      </div>
+
+      {/* Daily 6-Class Schedule Selector Bar */}
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-md overflow-x-auto">
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-[11px] font-extrabold uppercase tracking-wider text-indigo-400 flex items-center space-x-2">
+            <span>📅 Today's Timetable: 6 Scheduled 1-Hour Classes</span>
+            <span className="text-slate-500">• Click to Switch Class</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+          {DAILY_6_CLASS_SCHEDULE.map(c => {
+            const isActive = activeClassNumber === c.classNumber;
+            const assignedTeacher = TEACHERS_MAP[c.teacherId];
+            return (
+              <button
+                key={c.classNumber}
+                onClick={() => handleSelectDailyClass(c)}
+                className={`p-2 rounded-xl text-left border transition flex flex-col justify-between ${
+                  isActive
+                    ? 'bg-gradient-to-r from-indigo-600/30 to-purple-600/30 border-indigo-500 ring-1 ring-indigo-500/40 text-white'
+                    : 'bg-slate-950/60 border-slate-800/80 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                }`}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-black text-indigo-400 uppercase">Class {c.classNumber}</span>
+                  <span className="text-[9px] text-slate-500">{c.timeSlot.split('-')[0]}</span>
+                </div>
+                <div className="text-xs font-bold text-slate-200 truncate mt-1">{c.icon} {c.subject.split('&')[0]}</div>
+                <div className="text-[10px] text-slate-400 truncate mt-0.5">{assignedTeacher?.name}</div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -298,134 +380,117 @@ export default function AIAvatarClassroom({
                       : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
                   }`}
                 >
-                  <img src={t.image} alt={t.name} className="w-8 h-8 rounded-full object-cover" />
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[11px] font-semibold truncate">{t.name}</div>
-                    <div className="text-[9px] opacity-75 truncate">{t.gender === 'male' ? '♂️ Male Voice' : '♀️ Female Voice'}</div>
+                  <img src={t.image} alt={t.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold truncate leading-tight">{t.name}</div>
+                    <div className="text-[9px] text-slate-400 truncate">{t.gender === 'female' ? 'Female Faculty' : 'Male Faculty'}</div>
                   </div>
                 </button>
               ))}
             </div>
           </div>
-
-          {/* Digital Chalkboard */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 shadow-xl space-y-2 flex-1 flex flex-col">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400 border-b border-slate-800 pb-2">
-              📝 Digital Chalkboard & Key Formulas
-            </div>
-            <div className="flex-1 bg-slate-950 rounded-2xl p-3 border border-slate-800 text-xs space-y-2">
-              <ul className="space-y-1.5 text-slate-300 text-[11px]">
-                {(selectedChapter?.chalkboardKeypoints || [
-                  'Fundamental Theorem of Arithmetic',
-                  'HCF(a,b) × LCM(a,b) = a × b',
-                  'Proof by Contradiction Method'
-                ]).map((pt, i) => (
-                  <li key={i} className="flex items-start space-x-2">
-                    <span className="text-amber-400 font-bold">•</span>
-                    <span>{pt}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
         </div>
 
-        {/* Right Side: Sleek Chat Stream (7 cols) */}
-        <div className="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl flex flex-col shadow-2xl overflow-hidden min-h-0">
+        {/* Right Side: Digital Chalkboard & 2-Way Speech Dialogue (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col space-y-4 min-h-0">
           
-          {/* Header */}
-          <div className="px-4 py-3 border-b border-slate-800 bg-slate-950/40 flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-bold text-white">Live AI Dialogue ({activeTeacher.name})</span>
+          {/* Digital Chalkboard */}
+          <div className="bg-slate-900/90 border border-emerald-500/30 rounded-3xl p-4 shadow-xl shrink-0">
+            <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-800">
+              <div className="flex items-center space-x-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Digital Chalkboard</span>
+              </div>
+              <span className="text-[10px] text-slate-400">NCERT Aligned Key Concepts</span>
             </div>
-            <span className="text-[10px] text-slate-400">Student: {userProfile.studentName}</span>
+
+            <div className="space-y-1.5">
+              {(selectedChapter?.chalkboardKeypoints || [
+                'Fundamental Theorem of Arithmetic',
+                'HCF × LCM = Product of Two Numbers',
+                'Euclid Division Lemma: a = bq + r',
+                'Proof by contradiction for irrational numbers'
+              ]).map((point, i) => (
+                <div key={i} className="text-xs text-slate-200 flex items-start space-x-2 font-mono">
+                  <span className="text-emerald-400 font-bold">›</span>
+                  <span>{point}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Chat Stream Window */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3">
-            {chatHistory.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-md sm:max-w-lg rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-md ${
-                  msg.role === 'user' 
-                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-br-none' 
-                    : 'bg-slate-800/90 text-slate-100 border border-slate-700/60 rounded-bl-none'
-                }`}>
-                  <div className="text-[10px] font-semibold mb-1 opacity-75 flex justify-between items-center space-x-4">
-                    <span>{msg.role === 'user' ? userProfile.studentName : activeTeacher.name}</span>
-                    <span className="font-normal opacity-60">{msg.timestamp}</span>
+          {/* 2-Way Interactive Live Chat Stream */}
+          <div className="flex-1 bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col min-h-0 shadow-2xl">
+            <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
+              {chatHistory.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
+                >
+                  <div className="text-[10px] text-slate-500 mb-1 px-1">
+                    {msg.role === 'user' ? userProfile.studentName : activeTeacher.name} • {msg.timestamp}
                   </div>
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                  <div
+                    className={`max-w-[88%] p-3.5 rounded-2xl text-xs leading-relaxed ${
+                      msg.role === 'user'
+                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-tr-none shadow-lg'
+                        : 'bg-slate-950 border border-slate-800 text-slate-200 rounded-tl-none shadow-md'
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-slate-800 border border-slate-700/60 text-slate-300 text-xs px-4 py-3 rounded-2xl rounded-bl-none flex items-center space-x-2 shadow-md">
-                  <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" />
-                  <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce delay-100" />
-                  <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce delay-200" />
-                  <span className="ml-2 text-slate-400">{activeTeacher.name} is thinking...</span>
+              {isLoading && (
+                <div className="flex items-center space-x-2 text-indigo-400 text-xs p-2">
+                  <div className="w-2 h-2 rounded-full bg-indigo-400 animate-ping" />
+                  <span>{activeTeacher.name} is formulating the response...</span>
                 </div>
-              </div>
-            )}
-            <div ref={chatEndRef} />
-          </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
 
-          {/* Clean Input Controls */}
-          <div className="p-3 bg-slate-950/80 border-t border-slate-800 space-y-2">
-            <form onSubmit={handleSendResponse} className="flex items-center space-x-2">
-              {/* Mic Voice Button - Disabled during AI Speech */}
+            {/* 2-Way Input Form: Web Speech Microphone + Send */}
+            <form onSubmit={handleSendResponse} className="mt-3 flex items-center space-x-2 pt-2 border-t border-slate-800">
               <button
                 type="button"
-                disabled={isSpeaking || isLoading}
                 onClick={handleVoiceToggle}
-                className={`px-4 py-3 rounded-2xl text-xs font-bold transition flex items-center space-x-1.5 shrink-0 ${
-                  isSpeaking 
-                    ? 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
-                    : isListening 
-                      ? 'bg-rose-600 text-white animate-pulse shadow-lg shadow-rose-600/40' 
-                      : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                disabled={isSpeaking || isLoading}
+                className={`p-3 rounded-2xl border transition flex items-center justify-center ${
+                  isListening
+                    ? 'bg-rose-600 text-white border-rose-500 animate-pulse shadow-lg shadow-rose-600/30'
+                    : isSpeaking
+                    ? 'bg-slate-800 text-slate-600 border-slate-700 cursor-not-allowed'
+                    : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
                 }`}
-                title={isSpeaking ? "Mic disabled while AI is speaking" : isListening ? "Listening... Click to stop" : "Speak to AI Teacher"}
+                title={isSpeaking ? 'Microphone locked while teacher speaks' : isListening ? 'Click to stop recording' : 'Click to speak'}
               >
-                <span>
-                  {isSpeaking ? '🔊 AI Speaking...' : isListening ? '🎙️ Listening...' : '🎤 Voice Input'}
-                </span>
+                🎤
               </button>
 
               <input
                 type="text"
                 value={input}
-                onChange={e => setInput(e.target.value)}
-                placeholder={isSpeaking ? `${activeTeacher.name} is speaking...` : isListening ? "Listening to your voice..." : `Ask ${activeTeacher.name} anything...`}
-                className="flex-1 bg-slate-800/90 border border-slate-700 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-indigo-500 text-white placeholder-slate-500 shadow-inner"
+                onChange={(e) => setInput(e.target.value)}
+                disabled={isLoading || isSpeaking}
+                placeholder={isSpeaking ? "Teacher is speaking..." : isListening ? "Listening to your voice..." : "Type your question or response here..."}
+                className="flex-1 bg-slate-950 border border-slate-800 rounded-2xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
               />
 
               <button
                 type="submit"
-                disabled={isLoading || isSpeaking || !input.trim()}
-                className={`px-5 py-3 rounded-2xl font-bold text-xs text-white shadow-lg transition-all shrink-0 ${
-                  isLoading || isSpeaking || !input.trim() 
-                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
-                    : `${activeTeacher.btnColor} shadow-indigo-600/20 active:scale-95`
-                }`}
+                disabled={!input.trim() || isLoading || isSpeaking}
+                className="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 text-white text-xs font-bold transition shadow-lg shadow-indigo-600/30"
               >
                 Send
               </button>
             </form>
-
-            {speechText && (
-              <div className="text-[10px] text-emerald-400 bg-slate-900 px-3 py-1 rounded-xl border border-slate-800">
-                Voice input detected: "{speechText}"
-              </div>
-            )}
           </div>
 
         </div>
-
       </div>
+
     </div>
   );
 }

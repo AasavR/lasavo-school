@@ -5,6 +5,7 @@ export default function AstroHeader({ onOpenCalculator, onSelectPackage, activeS
 
   const navItems = [
     { id: 'calculator', label: 'Instant Calculator', icon: '🔢' },
+    { id: 'palmistry', label: 'Hast Rekha Palmistry', icon: '🖐️' },
     { id: 'packages', label: 'Vedic Astrolas Packages', icon: '✨' },
     { id: 'numerologists', label: 'Insta Numerologists', icon: '⭐' },
     { id: 'horoscope', label: 'Daily Horoscope', icon: '🌌' },
@@ -29,10 +30,10 @@ export default function AstroHeader({ onOpenCalculator, onSelectPackage, activeS
                 ASTROLAS
               </span>
               <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                Astro-Numerology
+                Palmistry & Numerology
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-mono">astrolas.netlify.app • Chaldean & Lo Shu Grid</p>
+            <p className="text-[11px] text-slate-400 font-mono">astrolas.netlify.app • Hast Rekha & Chaldean Grid</p>
           </div>
         </div>
 

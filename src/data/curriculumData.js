@@ -18,6 +18,16 @@ export const GRADES = [
   { id: 'class-12', name: 'Class 12', category: 'Sr. Secondary (11-12)' }
 ];
 
+// Daily 6-Class 1-Hour Timetable Schedule per day
+export const DAILY_6_CLASS_SCHEDULE = [
+  { classNumber: 1, timeSlot: '09:00 AM - 10:00 AM', subject: 'Mathematics & Logic', teacherId: 'ananya', icon: '📐', duration: '60 mins', chapterTitle: 'Chapter 1: Real Numbers & Euclid Lemma' },
+  { classNumber: 2, timeSlot: '10:15 AM - 11:15 AM', subject: 'Physics & Space Science', teacherId: 'priya', icon: '⚡', duration: '60 mins', chapterTitle: 'Chapter 10: Light Refraction & Optics' },
+  { classNumber: 3, timeSlot: '11:30 AM - 12:30 PM', subject: 'Chemistry & Reactions', teacherId: 'rajesh', icon: '🧪', duration: '60 mins', chapterTitle: 'Chapter 1: Chemical Reactions & Equations' },
+  { classNumber: 4, timeSlot: '01:30 PM - 02:30 PM', subject: 'English Literature & Grammar', teacherId: 'kavya', icon: '📚', duration: '60 mins', chapterTitle: 'Chapter 1: Prose, Poetry & Tenses' },
+  { classNumber: 5, timeSlot: '02:45 PM - 03:45 PM', subject: 'Social Science & History', teacherId: 'kavya', icon: '🏛️', duration: '60 mins', chapterTitle: 'Chapter 1: Rise of Nationalism & Civics' },
+  { classNumber: 6, timeSlot: '04:00 PM - 05:00 PM', subject: 'Computer Science & AI Tech', teacherId: 'rajesh', icon: '💻', duration: '60 mins', chapterTitle: 'Chapter 1: Python Basics & AI Logic' }
+];
+
 // 4 Distinguished Teachers: 3 Women + 1 Man, each with unique realistic voice characteristics
 export const TEACHERS_MAP = {
   ananya: {
@@ -98,7 +108,7 @@ export const SAMPLE_CURRICULUM = {
             id: 'ch-real-numbers',
             title: 'Chapter 1: Real Numbers & Euclid Lemma',
             summary: 'Fundamental Theorem of Arithmetic, Irrational numbers proof (√2, √3), and Euclid Division.',
-            duration: '45 mins',
+            duration: '60 mins',
             ncertRef: 'NCERT Mathematics Class 10 - Chapter 1',
             chalkboardKeypoints: [
               'Theorem: Fundamental Theorem of Arithmetic',
@@ -117,67 +127,66 @@ export const SAMPLE_CURRICULUM = {
             id: 'ch-polynomials',
             title: 'Chapter 2: Polynomials & Zeroes',
             summary: 'Geometrical meaning of zeroes, relationship between zeroes and coefficients of quadratic polynomials.',
-            duration: '50 mins',
+            duration: '60 mins',
             ncertRef: 'NCERT Mathematics Class 10 - Chapter 2',
             chalkboardKeypoints: [
-              'General Form: ax² + bx + c = 0',
-              'Sum of Zeroes (α + β) = -b/a',
-              'Product of Zeroes (α · β) = c/a',
-              'Parabola intersects X-axis at real zeroes'
+              'Quadratic Form: ax² + bx + c',
+              'Sum of zeroes (α + β) = -b/a',
+              'Product of zeroes (α × β) = c/a'
             ],
             stimulusQuestion: {
-              prompt: 'For the quadratic polynomial x² - 5x + 6, what is the sum of its zeroes (α + β)?',
+              prompt: 'What is the sum of zeroes of x² - 5x + 6?',
               expectedAnswer: '5',
-              hint: 'Recall that α + β = -b/a where a=1 and b=-5.',
-              explanation: 'Correct! α + β = -(-5)/1 = 5. The zeroes are 2 and 3.'
+              hint: 'α + β = -b/a, where b = -5 and a = 1.',
+              explanation: 'Exact! α + β = -(-5)/1 = 5.'
             }
           }
         ]
       },
       {
         id: 'c10-m-phy',
-        subjectName: 'Physics (Science)',
+        subjectName: 'Physics',
         code: 'CBSE-10-P01',
         teacherId: 'priya',
         icon: '⚡',
         chapters: [
           {
-            id: 'ch-light-reflection',
-            title: 'Chapter 10: Light - Reflection & Refraction',
-            summary: 'Laws of reflection, spherical mirrors (concave/convex), mirror formula (1/f = 1/v + 1/u), and refractive index.',
-            duration: '50 mins',
+            id: 'ch-light-optics',
+            title: 'Chapter 10: Light Refraction & Spherical Mirrors',
+            summary: 'Snell Law, refractive index, convex & concave lens ray diagrams, and lens formula.',
+            duration: '60 mins',
             ncertRef: 'NCERT Science Class 10 - Chapter 10',
             chalkboardKeypoints: [
+              'Snell Law: n1 sin(θ1) = n2 sin(θ2)',
               'Mirror Formula: 1/f = 1/v + 1/u',
-              'Magnification m = -v/u = h\'/h',
-              'Snell\'s Law: n1 sin(i) = n2 sin(r)',
-              'Concave Mirror creates Real & Inverted images for u > f'
+              'Lens Formula: 1/f = 1/v - 1/u',
+              'Power of lens P = 1/f (in meters)'
             ],
             stimulusQuestion: {
-              prompt: 'When light passes from air into water, does its speed increase or decrease?',
-              expectedAnswer: 'decrease',
-              hint: 'Water is optically denser than air.',
-              explanation: 'Correct! Water is optically denser than air, so light slows down and bends towards the normal.'
+              prompt: 'What is the unit of Power of a Lens?',
+              expectedAnswer: 'diopter',
+              hint: 'It starts with D.',
+              explanation: 'Correct! Power of a lens is measured in Diopters (D).'
             }
           }
         ]
       },
       {
         id: 'c10-m-chem',
-        subjectName: 'Chemistry & Computer Science',
-        code: 'CBSE-10-CS01',
+        subjectName: 'Chemistry',
+        code: 'CBSE-10-C01',
         teacherId: 'rajesh',
         icon: '🧪',
         chapters: [
           {
-            id: 'ch-python-basics',
-            title: 'Chapter 1: Python & Reactions',
-            summary: 'Chemical reaction balancing and Python data structures.',
-            duration: '40 mins',
-            ncertRef: 'NCERT Science & IT Class 10',
+            id: 'ch-chem-reactions',
+            title: 'Chapter 1: Chemical Reactions & Equations',
+            summary: 'Balancing chemical equations, combination, decomposition, displacement, and redox reactions.',
+            duration: '60 mins',
+            ncertRef: 'NCERT Science Class 10 - Chapter 1',
             chalkboardKeypoints: [
-              'Chemical Equation Balancing: Law of Conservation of Mass',
-              'Python Data Types: Lists, Dictionaries, Functions',
+              'Law of Conservation of Mass: Total mass reactants = Total mass products',
+              'Decomposition: AB → A + B',
               'Exothermic vs Endothermic reactions'
             ],
             stimulusQuestion: {
@@ -200,7 +209,7 @@ export const SAMPLE_CURRICULUM = {
             id: 'ch-english-poetry',
             title: 'Chapter 1: Poetic Devices & Prose',
             summary: 'Analysis of Metaphor, Simile, Alliteration, and Critical Essay Writing.',
-            duration: '45 mins',
+            duration: '60 mins',
             ncertRef: 'NCERT English First Flight Class 10',
             chalkboardKeypoints: [
               'Metaphor: Direct comparison without using like or as',
