@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import EarbudsHeader from './components/EarbudsHeader';
 import EarbudsHero from './components/EarbudsHero';
+import ModelSelectionCatalog from './components/ModelSelectionCatalog';
 import SoundSimulator from './components/SoundSimulator';
 import EarbudsColorCustomizer from './components/EarbudsColorCustomizer';
 import BatteryCalculator from './components/BatteryCalculator';
@@ -28,13 +29,13 @@ export default function App() {
     }
   };
 
-  const handlePayWithRazorpay = (amount = 1299) => {
+  const handlePayWithRazorpay = (amount = 1299, productName = 'Lasavo Audio Earbuds') => {
     initiatePayment({
       amount: amount,
-      productName: 'Lasavo Pro TWS Wireless Earbuds',
-      description: '60H Playtime, 45ms Low Latency, Fast Charge',
+      productName: productName,
+      description: `Lasavo Genuine Audio - ₹${amount}`,
       onSuccess: (details) => {
-        setPaymentDetails(details);
+        setPaymentDetails({ ...details, amount });
         setIsSuccessModalOpen(true);
       },
       onError: (err) => {
@@ -52,7 +53,7 @@ export default function App() {
         setLang={setLang}
         onOpenDealModal={() => setIsDealModalOpen(true)}
         onScrollToSection={handleScrollToSection}
-        onPayOnline={() => handlePayWithRazorpay(1299)}
+        onPayOnline={(amt, name) => handlePayWithRazorpay(amt || 1299, name || 'Lasavo Audio Pro TWS')}
         paymentLoading={paymentLoading}
       />
 
@@ -64,7 +65,14 @@ export default function App() {
           lang={lang}
           onOpenDealModal={() => setIsDealModalOpen(true)}
           onScrollToSection={handleScrollToSection}
-          onPayOnline={() => handlePayWithRazorpay(1299)}
+          onPayOnline={(amt, name) => handlePayWithRazorpay(amt || 1299, name || 'Lasavo Audio Pro TWS')}
+          paymentLoading={paymentLoading}
+        />
+
+        {/* 3 Models Catalog Section (₹350, ₹500, ₹1,299) */}
+        <ModelSelectionCatalog
+          lang={lang}
+          onPayOnline={(amt, name) => handlePayWithRazorpay(amt, name)}
           paymentLoading={paymentLoading}
         />
 
@@ -99,7 +107,7 @@ export default function App() {
         lang={lang}
         onPayOnline={() => {
           setIsDealModalOpen(false);
-          handlePayWithRazorpay(1039); // Discounted price with coupon code
+          handlePayWithRazorpay(1039, 'Lasavo Audio Pro TWS (Coupon Offer)');
         }}
         paymentLoading={paymentLoading}
       />

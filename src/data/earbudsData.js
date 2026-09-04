@@ -1,5 +1,109 @@
-export const AMAZON_PRODUCT_URL = "https://www.amazon.in/-/hi/%E0%A4%B5%E0%A4%BE%E0%A4%AF%E0%A4%B0%E0%A4%B2%E0%A5%87%E0%A4%B8-%E0%A4%88%E0%A4%AF%E0%A4%B0%E0%A4%AC%E0%A4%A1%E0%A5%8D%E0%A4%B8-%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A5%87%E0%A4%9F%E0%A4%BE%E0%A4%87%E0%A4%AE-%E0%A4%B2%E0%A5%87%E0%A4%9F%E0%A5%87%E0%A4%82%E0%A4%B8%E0%A5%80-%E0%A4%9A%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%9C%E0%A4%BF%E0%A4%82%E0%A4%97/dp/B0CXMHP7SH";
+export const AMAZON_PRODUCT_URL = "https://www.amazon.in/-/hi/%E0%A4%B5%E0%A4%BE%E0%A4%AF%E0%A4%B0%E0%A4%B2%E0%A5%87%E0%A4%B8-%E0%A4%88%E0%A4%AF%E0%A4%B0%E0%A4%AC%E0%A4%A1%E0%A5%8D%E0%A4%B8-%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A5%87%E0%A4%9F%E0%A4%AE-%E0%A4%B2%E0%A5%87%E0%A4%9F%E0%A5%87%E0%A4%82%E0%A4%B8%E0%A5%80-%E0%A4%9A%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%9C%E0%A4%BF%E0%A4%82%E0%A4%97/dp/B0CXMHP7SH";
 export const ASIN = "B0CXMHP7SH";
+
+export const PRODUCT_MODELS = [
+  {
+    id: "lasavo-bassbuds-lite",
+    nameEn: "Lasavo BassBuds Lite",
+    nameHi: "लासावो बेस बड्स लाइट",
+    badgeEn: "Entry Edition • Wired HD",
+    badgeHi: "एंट्री एडिशन • वायर्ड HD",
+    price: 350,
+    originalPrice: 999,
+    discountPercent: 65,
+    taglineEn: "HD Extra Bass Stereo Earphones with Dynamic 10mm Driver & In-line HD Mic",
+    taglineHi: "HD एक्स्ट्रा बेस स्टीरियो इयरफ़ोन और इन-लाइन HD माइक",
+    rating: 4.8,
+    reviewsCount: 8420,
+    featuresEn: [
+      "10mm Heavy Bass Driver",
+      "Tangle-Free Ultra Cable",
+      "In-line HD Mic for Calls",
+      "3.5mm Gold / Type-C Jack"
+    ],
+    featuresHi: [
+      "10mm हैवी बेस ड्राइवर",
+      "टैंगल-फ्री टिकाऊ केबल",
+      "कॉल के लिए इन-लाइन HD माइक",
+      "3.5mm गोल्ड / टाइप-सी जैक"
+    ],
+    image: "/earbuds_hero.jpg",
+    isPopular: false,
+    gradient: "from-emerald-950/80 via-slate-900 to-[#0B0F19]",
+    borderColor: "border-emerald-500/40",
+    badgeColor: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+    priceColor: "text-emerald-300",
+    btnGradient: "from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black shadow-emerald-500/25"
+  },
+  {
+    id: "lasavo-airpulse-sport",
+    nameEn: "Lasavo AirPulse Sport TWS",
+    nameHi: "लासावो एयरपल्स स्पोर्ट्स TWS",
+    badgeEn: "Most Popular • Wireless Sport",
+    badgeHi: "सबसे लोकप्रिय • वायरलेस स्पोर्ट्स",
+    price: 500,
+    originalPrice: 1999,
+    discountPercent: 75,
+    taglineEn: "30 Hours Playtime Wireless Earbuds with Touch Control & IPX4 Sweatproof",
+    taglineHi: "30 घंटे का प्लेबैक, टच कंट्रोल और स्वेटप्रूफ वायरलेस बड्स",
+    rating: 4.9,
+    reviewsCount: 12600,
+    featuresEn: [
+      "30 Hours Total Playtime",
+      "Bluetooth v5.3 Auto-Pair",
+      "IPX4 Sweat & Splash Proof",
+      "Smart Touch Controls"
+    ],
+    featuresHi: [
+      "30 घंटे कुल प्लेटाइम",
+      "ब्लूटूथ v5.3 ऑटो-पेयर",
+      "IPX4 स्वेटप्रूफ रेटिंग",
+      "स्मार्ट टच कंट्रोल्स"
+    ],
+    image: "/earbuds_hero.jpg",
+    isPopular: true,
+    popularTagEn: "🔥 BEST VALUE PICK",
+    popularTagHi: "🔥 सर्वश्रेष्ठ वैल्यू ऑफर",
+    gradient: "from-cyan-950/90 via-slate-900 to-[#0B0F19]",
+    borderColor: "border-cyan-500/60 shadow-cyan-500/20",
+    badgeColor: "bg-cyan-500/20 text-cyan-400 border-cyan-500/40",
+    priceColor: "text-cyan-300",
+    btnGradient: "from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black shadow-cyan-500/30"
+  },
+  {
+    id: "lasavo-audio-pro",
+    nameEn: "Lasavo Audio Pro TWS (Flagship)",
+    nameHi: "लासावो ऑडियो प्रो TWS (फ्लैगशिप)",
+    badgeEn: "Flagship • Gaming & ANC",
+    badgeHi: "फ्लैगशिप • गेमिंग और ANC",
+    price: 1299,
+    originalPrice: 3999,
+    discountPercent: 67,
+    taglineEn: "60 Hours Playtime • 45ms Beast Gaming Latency • 13mm Titanium Drivers • Quad-Mic ENC",
+    taglineHi: "60 घंटे प्लेटाइम • 45ms गेमिंग लेटेंसी • टाइटेनियम ड्राइवर्स • क्वाड-माइक ENC",
+    rating: 4.9,
+    reviewsCount: 18450,
+    featuresEn: [
+      "60 Hours Massive Playtime",
+      "45ms Ultra-Low Gaming Latency",
+      "Fast Charge (10m = 120m)",
+      "Quad-Mic ENC Noise Cancel"
+    ],
+    featuresHi: [
+      "60 घंटे विशाल प्लेटाइम",
+      "45ms अल्ट्रा-लो गेमिंग लेटेंसी",
+      "10 मिनट फास्ट टाइप-सी चार्जिंग",
+      "क्वाड-माइक ENC नॉइज़ कैंसिलेशन"
+    ],
+    image: "/earbuds_hero.jpg",
+    isPopular: false,
+    gradient: "from-amber-950/80 via-slate-900 to-[#0B0F19]",
+    borderColor: "border-amber-500/50",
+    badgeColor: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    priceColor: "text-amber-300",
+    btnGradient: "from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black shadow-amber-500/25"
+  }
+];
 
 export const PRODUCT_DATA = {
   nameEn: "Lasavo Audio Pro TWS Wireless Earbuds",

@@ -10,6 +10,7 @@ export default function EarbudsHeader({ lang, setLang, onOpenDealModal, onScroll
   };
 
   const navLinks = [
+    { id: 'models-catalog', labelEn: '3 Models (₹350-₹1299)', labelHi: '3 मॉडल (₹350-₹1299)' },
     { id: 'sound-simulator', labelEn: 'Sound Test', labelHi: 'साउंड टेस्ट' },
     { id: 'features', labelEn: 'Features', labelHi: 'विशेषताएं' },
     { id: 'customizer', labelEn: '360° Colors', labelHi: 'कलर वेरिएंट' },
@@ -26,11 +27,11 @@ export default function EarbudsHeader({ lang, setLang, onOpenDealModal, onScroll
         <Sparkles className="w-4 h-4 animate-pulse text-amber-300" />
         <span>
           {lang === 'hi' 
-            ? '🔥 डायरेक्ट पोर्टल ऑफर: Razorpay द्वारा ऑनलाइन भुगतान करें और तुरंत कन्फर्मेशन पाएं!' 
-            : '🔥 Direct Checkout: Pay Online via Razorpay for instant order confirmation!'}
+            ? '🔥 3 नए मॉडल लॉन्च! ₹350, ₹500 और ₹1,299 में डायरेक्ट Razorpay द्वारा ऑनलाइन खरीदें!' 
+            : '🔥 3 Models Available! Shop online via Razorpay at ₹350, ₹500 & ₹1,299!'}
         </span>
         <span className="hidden md:inline bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase">
-          {lang === 'hi' ? 'सुरक्षित भुगतान' : 'Secure Razorpay'}
+          {lang === 'hi' ? 'लाइव भुगतान' : 'Live Razorpay'}
         </span>
       </div>
 
@@ -49,22 +50,22 @@ export default function EarbudsHeader({ lang, setLang, onOpenDealModal, onScroll
                   LASAVO
                 </span>
                 <span className="text-xs bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 px-1.5 py-0.5 rounded font-mono font-bold">
-                  PRO
+                  MODELS
                 </span>
               </div>
               <p className="text-[10px] text-cyan-400/80 font-mono tracking-widest uppercase">
-                {lang === 'hi' ? 'TWS ईयरबड्स' : 'TWS Gaming Earbuds'}
+                {lang === 'hi' ? 'ईयरफोन सीरीज' : 'Earphone Lineup'}
               </p>
             </div>
           </div>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-4">
+          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-3">
             {navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => onScrollToSection(link.id)}
-                className="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-cyan-400 hover:bg-slate-800/60 transition-all duration-200"
+                className="px-2.5 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-cyan-400 hover:bg-slate-800/60 transition-all duration-200"
               >
                 {lang === 'hi' ? link.labelHi : link.labelEn}
               </button>
@@ -84,14 +85,13 @@ export default function EarbudsHeader({ lang, setLang, onOpenDealModal, onScroll
               <span>{lang === 'en' ? 'हिंदी 🇮🇳' : 'EN 🇬🇧'}</span>
             </button>
 
-            {/* Pay Online Razorpay Button */}
+            {/* View Models CTA Button */}
             <button
-              onClick={onPayOnline}
-              disabled={paymentLoading}
+              onClick={() => onScrollToSection('models-catalog')}
               className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/25 hover:scale-105 transition-all duration-200"
             >
               <CreditCard className="w-4 h-4 text-slate-950" />
-              <span>{lang === 'hi' ? 'ऑनलाइन खरीदें (₹1,299)' : 'Pay Online (₹1,299)'}</span>
+              <span>{lang === 'hi' ? '3 मॉडल देखें (₹350+)' : 'Explore 3 Models (₹350+)'}</span>
             </button>
 
             {/* Direct Amazon CTA Button */}
@@ -127,7 +127,7 @@ export default function EarbudsHeader({ lang, setLang, onOpenDealModal, onScroll
                 onScrollToSection(link.id);
                 setMobileMenuOpen(false);
               }}
-              className="block w-full text-left px-3 py-2 rounded-lg text-slate-200 hover:bg-cyan-500/10 hover:text-cyan-400 font-medium"
+              className="block w-full text-left px-3 py-2 rounded-lg text-slate-200 hover:bg-cyan-500/10 hover:text-cyan-400 font-medium text-sm"
             >
               {lang === 'hi' ? link.labelHi : link.labelEn}
             </button>
@@ -136,12 +136,12 @@ export default function EarbudsHeader({ lang, setLang, onOpenDealModal, onScroll
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onPayOnline();
+                onScrollToSection('models-catalog');
               }}
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black text-sm shadow-lg"
             >
               <CreditCard className="w-4 h-4" />
-              <span>{lang === 'hi' ? 'ऑनलाइन भुगतान करें (₹1,299)' : 'Pay Online with Razorpay (₹1,299)'}</span>
+              <span>{lang === 'hi' ? '3 मॉडल खरीदें (₹350, ₹500, ₹1,299)' : 'Buy 3 Models (₹350, ₹500, ₹1,299)'}</span>
             </button>
             <a
               href={AMAZON_PRODUCT_URL}
