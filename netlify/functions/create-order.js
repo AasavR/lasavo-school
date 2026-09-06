@@ -1,7 +1,6 @@
 const Razorpay = require('razorpay');
 
 exports.handler = async function (event) {
-  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -11,16 +10,8 @@ exports.handler = async function (event) {
   }
 
   try {
-    const key_id = process.env.RAZORPAY_KEY_ID;
-    const key_secret = process.env.RAZORPAY_KEY_SECRET;
-
-    if (!key_id || !key_secret) {
-      return {
-        statusCode: 401,
-        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: 'Authentication failure: Razorpay API credentials missing in server environment' })
-      };
-    }
+    const key_id = process.env.RAZORPAY_KEY_ID || 'rzp_test_TWRYKe5DWcerEE';
+    const key_secret = process.env.RAZORPAY_KEY_SECRET || 'fMyMeroQLQ0JhvN45Ec6H6Y7';
 
     let body = {};
     if (event.body) {
@@ -35,10 +26,8 @@ exports.handler = async function (event) {
       }
     }
 
-    // Default amount to 4000000 paise (₹40,000) if not specified, or parse amount
-    const rawAmount = body.amount !== undefined ? parseInt(body.amount, 10) : 4000000;
+    const rawAmount = body.amount !== undefined ? parseInt(body.amount, 10) : 10000;
 
-    // Validate minimum amount (must be >= 100 paise)
     if (isNaN(rawAmount) || rawAmount < 100) {
       return {
         statusCode: 400,
@@ -48,8 +37,8 @@ exports.handler = async function (event) {
     }
 
     const currency = body.currency || 'INR';
-    const receipt = body.receipt || `receipt_${Date.now()}`;
-    const notes = body.notes || { platform: 'School.lasavo.org', item: 'EdTech 1-Year Pass' };
+    const receipt = body.receipt || `p2ppro_${Date.now()}`;
+    const notes = body.notes || { platform: 'P2PPro.me RWA Protocol', item: 'RWA Asset Token' };
 
     const instance = new Razorpay({ key_id, key_secret });
 

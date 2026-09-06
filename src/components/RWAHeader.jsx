@@ -24,7 +24,7 @@ export default function RWAHeader({
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
             </span>
-            <span>LIVE RWA ORACLE</span>
+            <span>LIVE RWA & STOCK ORACLE</span>
           </div>
 
           <div className="overflow-hidden whitespace-nowrap w-full">
@@ -63,69 +63,81 @@ export default function RWAHeader({
                 <span className="text-2xl font-extrabold tracking-tight text-white font-sans">P2PPro</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 font-mono">.me</span>
               </div>
-              <p className="text-[10px] tracking-wider text-slate-400 uppercase font-medium">Cross-Chain RWA Infrastructure</p>
+              <p className="text-[10px] tracking-wider text-slate-400 uppercase font-medium">Pre-IPO Stocks & RWA Protocol</p>
             </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* Dedicated Verticals Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-1 text-sm font-medium">
             <button
               onClick={() => setActiveTab('marketplace')}
-              className={`px-3.5 py-2 rounded-lg transition-colors ${
+              className={`px-3 py-2 rounded-lg transition-colors ${
                 activeTab === 'marketplace' 
                   ? 'bg-slate-800/80 text-amber-400 font-semibold border border-amber-500/30 shadow-sm' 
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
               }`}
             >
-              <i className="fa-solid fa-store mr-2 text-amber-400"></i>
+              <i className="fa-solid fa-store mr-1.5 text-amber-400"></i>
               Marketplace
             </button>
 
             <button
               onClick={() => setActiveTab('preipo')}
-              className={`px-3.5 py-2 rounded-lg transition-colors ${
+              className={`px-3 py-2 rounded-lg transition-colors ${
                 activeTab === 'preipo' 
-                  ? 'bg-slate-800/80 text-amber-400 font-semibold border border-amber-500/30 shadow-sm' 
+                  ? 'bg-slate-800/80 text-purple-400 font-semibold border border-purple-500/30 shadow-sm' 
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
               }`}
             >
-              <i className="fa-solid fa-rocket mr-2 text-purple-400"></i>
-              Pre-IPO Synthetics
+              <i className="fa-solid fa-chart-line mr-1.5 text-purple-400"></i>
+              Pre-IPO Stocks
+            </button>
+
+            <button
+              onClick={() => setActiveTab('realestate')}
+              className={`px-3 py-2 rounded-lg transition-colors ${
+                activeTab === 'realestate' 
+                  ? 'bg-slate-800/80 text-cyan-400 font-semibold border border-cyan-500/30 shadow-sm' 
+                  : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
+              }`}
+            >
+              <i className="fa-solid fa-building mr-1.5 text-cyan-400"></i>
+              Real Estate
             </button>
 
             <button
               onClick={() => setActiveTab('otc')}
-              className={`px-3.5 py-2 rounded-lg transition-colors ${
+              className={`px-3 py-2 rounded-lg transition-colors ${
                 activeTab === 'otc' 
                   ? 'bg-slate-800/80 text-amber-400 font-semibold border border-amber-500/30 shadow-sm' 
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
               }`}
             >
-              <i className="fa-solid fa-handshake mr-2 text-cyan-400"></i>
-              P2P OTC Deals
+              <i className="fa-solid fa-robot mr-1.5 text-emerald-400"></i>
+              Stock Bot & OTC
             </button>
 
             <button
               onClick={() => setActiveTab('tokenize')}
-              className={`px-3.5 py-2 rounded-lg transition-colors ${
+              className={`px-3 py-2 rounded-lg transition-colors ${
                 activeTab === 'tokenize' 
-                  ? 'bg-slate-800/80 text-amber-400 font-semibold border border-amber-500/30 shadow-sm' 
+                  ? 'bg-slate-800/80 text-emerald-400 font-semibold border border-emerald-500/30 shadow-sm' 
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
               }`}
             >
-              <i className="fa-solid fa-coins mr-2 text-emerald-400"></i>
-              Tokenize Asset
+              <i className="fa-solid fa-plus-circle mr-1.5 text-emerald-400"></i>
+              List Opportunity
             </button>
 
             <button
               onClick={() => setActiveTab('por')}
-              className={`px-3.5 py-2 rounded-lg transition-colors ${
+              className={`px-3 py-2 rounded-lg transition-colors ${
                 activeTab === 'por' 
-                  ? 'bg-slate-800/80 text-amber-400 font-semibold border border-amber-500/30 shadow-sm' 
+                  ? 'bg-slate-800/80 text-blue-400 font-semibold border border-blue-500/30 shadow-sm' 
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
               }`}
             >
-              <i className="fa-solid fa-shield-halved mr-2 text-blue-400"></i>
+              <i className="fa-solid fa-shield-halved mr-1.5 text-blue-400"></i>
               Proof of Reserves
             </button>
           </nav>
@@ -229,10 +241,18 @@ export default function RWAHeader({
         <button
           onClick={() => setActiveTab('preipo')}
           className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
-            activeTab === 'preipo' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'text-slate-300'
+            activeTab === 'preipo' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' : 'text-slate-300'
           }`}
         >
-          Pre-IPO Synthetics
+          Pre-IPO Stocks
+        </button>
+        <button
+          onClick={() => setActiveTab('realestate')}
+          className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
+            activeTab === 'realestate' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-300'
+          }`}
+        >
+          Real Estate
         </button>
         <button
           onClick={() => setActiveTab('otc')}
@@ -240,23 +260,15 @@ export default function RWAHeader({
             activeTab === 'otc' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'text-slate-300'
           }`}
         >
-          P2P OTC Deals
+          Stock Bot & OTC
         </button>
         <button
           onClick={() => setActiveTab('tokenize')}
           className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
-            activeTab === 'tokenize' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'text-slate-300'
+            activeTab === 'tokenize' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-slate-300'
           }`}
         >
-          Tokenize Asset
-        </button>
-        <button
-          onClick={() => setActiveTab('por')}
-          className={`px-3 py-1.5 rounded-lg whitespace-nowrap ${
-            activeTab === 'por' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'text-slate-300'
-          }`}
-        >
-          Proof of Reserve
+          List Opportunity
         </button>
       </div>
     </header>

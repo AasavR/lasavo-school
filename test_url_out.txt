@@ -1,0 +1,3 @@
+HTTP Status: 200
+Content-Type: image/jpeg
+Content-Length: 1040801

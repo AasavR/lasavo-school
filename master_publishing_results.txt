@@ -1,0 +1,163 @@
+=== LASAVO BOOKS MASTER FB & IG PUBLISHER ===
+Token Loaded (Length: 283)
+Discovered 3 Facebook Pages under User Token:
+ - Page: 'Lasavo' (ID: 101616129005771) | IG: None
+ - Page: 'YaariYan - India's App to Watch and Share Videos' (ID: 101302365013124) | IG: None
+ - Page: 'AA SAV' (ID: 100430174985138) | IG: None
+
+SELECTED FACEBOOK PAGE: 'Lasavo' (ID: 101616129005771)
+NOTE: No direct IG Business ID returned by Graph API for this token; publishing to Facebook Page pipeline.
+
+Starting publishing of 37 master items...
+
+[1/37] Publishing '10,000 Interactive Books in Your Pocket' (Reel 1)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101203285755113","post_id":"101616129005771_1101203319088443"}
+
+[2/37] Publishing '15-Minute Executive Book Summaries' (Reel 2)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101203375755104","post_id":"101616129005771_1101203419088433"}
+
+[3/37] Publishing 'Interactive 3D Kids Storybooks' (Reel 3)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+  FB Post Status (200): {"id":"1101203589088416","post_id":"101616129005771_1101203635755078"}
+
+[4/37] Publishing 'AI Audiobooks with Neural Voice Clarity' (Reel 4)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+  FB Post Status (200): {"id":"1101203715755070","post_id":"101616129005771_1101203752421733"}
+
+[5/37] Publishing 'Read 52 Books a Year Without Stress' (Reel 5)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101203839088391","post_id":"101616129005771_1101203882421720"}
+
+[6/37] Publishing 'Sci-Fi & Fantasy 3D Holographic Reader' (Reel 6)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101203962421712","post_id":"101616129005771_1101203999088375"}
+
+[7/37] Publishing 'Interactive Coding & Tech Manuals' (Reel 7)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101204052421703","post_id":"101616129005771_1101204082421700"}
+
+[8/37] Publishing 'Bedtime Fairy Tales Brought to Life' (Reel 8)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+  FB Post Status (200): {"id":"1101204169088358","post_id":"101616129005771_1101204202421688"}
+
+[9/37] Publishing 'Multilingual Book Translation Engine' (Reel 9)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+  FB Post Status (200): {"id":"1101204252421683","post_id":"101616129005771_1101204279088347"}
+
+[10/37] Publishing 'Speed Reading Trainer Mode' (Reel 10)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101204452421663","post_id":"101616129005771_1101204489088326"}
+
+[11/37] Publishing 'Financial Literacy & Wealth Library' (Reel 11)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101204552421653","post_id":"101616129005771_1101204582421650"}
+
+[12/37] Publishing 'Interactive STEM Textbooks for High School' (Reel 12)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101204729088302","post_id":"101616129005771_1101204769088298"}
+
+[13/37] Publishing 'Hands-Free Audiobooks for Drivers' (Reel 13)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+  FB Post Status (200): {"id":"1101204859088289","post_id":"101616129005771_1101204905754951"}
+
+[14/37] Publishing 'Early Reader Phonics & Vocabulary' (Reel 14)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+  FB Post Status (200): {"id":"1101205009088274","post_id":"101616129005771_1101205042421604"}
+
+[15/37] Publishing 'AI Flashcard & Quiz Generator' (Reel 15)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101205189088256","post_id":"101616129005771_1101205269088248"}
+
+[16/37] Publishing 'Rare Manuscripts & Historical Books' (Reel 16)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101205332421575","post_id":"101616129005771_1101205372421571"}
+
+[17/37] Publishing 'Mindfulness & Mental Health Library' (Reel 17)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+  FB Post Status (200): {"id":"1101205455754896","post_id":"101616129005771_1101205492421559"}
+
+[18/37] Publishing 'The 100-Year Life Executive Reading List' (Reel 18)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101205572421551","post_id":"101616129005771_1101205599088215"}
+
+[19/37] Publishing 'Interactive Mystery & Crime Novels' (Reel 19)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101205745754867","post_id":"101616129005771_1101205789088196"}
+
+[20/37] Publishing 'Custom Font & Dyslexia Friendly Modes' (Reel 20)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+  FB Post Status (200): {"id":"1101205875754854","post_id":"101616129005771_1101205902421518"}
+
+[21/37] Publishing 'Offline Unlimited Downloads Mode' (Reel 21)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+  FB Post Status (200): {"id":"1101206032421505","post_id":"101616129005771_1101206102421498"}
+
+[22/37] Publishing 'Biographies of Tech Pioneers' (Reel 22)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101206232421485","post_id":"101616129005771_1101206262421482"}
+
+[23/37] Publishing '3D Animated Biology & Medical Texts' (Reel 23)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101206319088143","post_id":"101616129005771_1101206392421469"}
+
+[24/37] Publishing 'Audiobook Sleep Timer & Ambient Sounds' (Reel 24)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+  FB Post Status (200): {"id":"1101206505754791","post_id":"101616129005771_1101206529088122"}
+
+[25/37] Publishing 'Kids Science & Space Exploration Storybooks' (Reel 25)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+  FB Post Status (200): {"id":"1101206632421445","post_id":"101616129005771_1101206672421441"}
+
+[26/37] Publishing 'AI Reader Assistant Answers Questions' (Reel 26)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101206802421428","post_id":"101616129005771_1101206845754757"}
+
+[27/37] Publishing 'Deep Work & Focus Strategy Library' (Reel 27)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101206912421417","post_id":"101616129005771_1101206959088079"}
+
+[28/37] Publishing 'Smart Highlight Sync Across All Devices' (Reel 28)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101207085754733","post_id":"101616129005771_1101207115754730"}
+
+[29/37] Publishing 'Graphic Novels & Manga with Animated Effects' (Reel 29)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101207339088041","post_id":"101616129005771_1101207385754703"}
+
+[30/37] Publishing 'Join the Lasavo Books Global Reader Club' (Reel 30)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101207525754689","post_id":"101616129005771_1101207555754686"}
+
+[31/37] Publishing 'Why Digital Audiobooks Are Revolutionizing Education' (Post 1)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101207729088002","post_id":"101616129005771_1101207762421332"}
+
+[32/37] Publishing 'Executive Book Summaries for Busy Leaders' (Post 2)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101207825754659","post_id":"101616129005771_1101207859087989"}
+
+[33/37] Publishing 'Make Storytime Magical with 3D Interactive Storybooks' (Post 3)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+  FB Post Status (200): {"id":"1101207925754649","post_id":"101616129005771_1101207962421312"}
+
+[34/37] Publishing 'High-Fidelity AI Audiobooks for Daily Commuters' (Post 4)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+  FB Post Status (200): {"id":"1101208035754638","post_id":"101616129005771_1101208072421301"}
+
+[35/37] Publishing 'Build a Lifetime Digital Library' (Post 5)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101208155754626","post_id":"101616129005771_1101208272421281"}
+
+[36/37] Publishing 'Complete Platform Demo: How Lasavo Books Works' (Script 1)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+  FB Post Status (200): {"id":"1101208362421272","post_id":"101616129005771_1101208419087933"}
+
+[37/37] Publishing 'Top 10 Business Book Summaries of 2026' (Script 2)
+Asset URL: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+  FB Post Status (200): {"id":"1101208549087920","post_id":"101616129005771_1101208609087914"}
+
+==================================================
+Master Run Completed! FB Posts Published: 37, IG Posts Published: 0
+==================================================

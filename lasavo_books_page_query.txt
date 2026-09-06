@@ -1,0 +1,21 @@
+Token Length: 284
+Targeting Lasavo Books Page ID: 1222908690916687
+
+=== DIRECT PAGE QUERY RESPONSE ===
+{
+  "id": "1222908690916687",
+  "name": "Lasavo Books",
+  "access_token": "EAAW98viOK9oBSUOpi44DZBZB52JLQFNVcZAYESEBAo4jYMa237nhxc0VhfojjHi797HDzrMvyaZBMUYtP7Vm0EZB2oUUUwTtFXUBuuHUPoQKkMJfpls6DYPAuimZAmaMuitBIzsIrE3E6dmSYE31aao4aWfxb4N0lfL4zZBYavH8NhOxhHbCQny9SEuEBWqZB2ZB5fo3RYSWCPQamI2o7q3uKHorJK8cof2hl9RgQ",
+  "instagram_business_account": {
+    "id": "17841427210786438",
+    "username": "lasavobooks",
+    "name": "Lasavo Books"
+  },
+  "connected_instagram_account": {
+    "id": "17841427210786438",
+    "username": "lasavobooks",
+    "name": "Lasavo Books"
+  }
+}
+
+SUCCESS! Found Instagram Business Account ID: 17841427210786438 (@lasavobooks)

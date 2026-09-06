@@ -1,0 +1,175 @@
+--- LIVE LASAVO BOOKS PUBLISHING ---
+Loaded 37 items from lasavo_books_master_content.csv
+
+[1/37] Publishing '10,000 Interactive Books in Your Pocket' (Reel 1)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100425359074183"}
+Publish Status: 200 -> Media ID: {"id":"18103647536249878"}
+
+[2/37] Publishing '15-Minute Executive Book Summaries' (Reel 2)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100425413074183"}
+Publish Status: 200 -> Media ID: {"id":"17867737359648047"}
+
+[3/37] Publishing 'Interactive 3D Kids Storybooks' (Reel 3)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+Container Status: 200 -> Response: {"id":"18100425461074183"}
+Publish Status: 200 -> Media ID: {"id":"18041718782817456"}
+
+[4/37] Publishing 'AI Audiobooks with Neural Voice Clarity' (Reel 4)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+Container Status: 200 -> Response: {"id":"18100425488074183"}
+Publish Status: 200 -> Media ID: {"id":"18426825685194309"}
+
+[5/37] Publishing 'Read 52 Books a Year Without Stress' (Reel 5)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100425533074183"}
+Publish Status: 200 -> Media ID: {"id":"18092074838213594"}
+
+[6/37] Publishing 'Sci-Fi & Fantasy 3D Holographic Reader' (Reel 6)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100425629074183"}
+Publish Status: 200 -> Media ID: {"id":"18117804202891455"}
+
+[7/37] Publishing 'Interactive Coding & Tech Manuals' (Reel 7)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100425656074183"}
+Publish Status: 200 -> Media ID: {"id":"18114276092286942"}
+
+[8/37] Publishing 'Bedtime Fairy Tales Brought to Life' (Reel 8)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+Container Status: 200 -> Response: {"id":"18100425695074183"}
+Publish Status: 200 -> Media ID: {"id":"18114549898974732"}
+
+[9/37] Publishing 'Multilingual Book Translation Engine' (Reel 9)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+Container Status: 200 -> Response: {"id":"18100425728074183"}
+Publish Status: 200 -> Media ID: {"id":"17957687361237414"}
+
+[10/37] Publishing 'Speed Reading Trainer Mode' (Reel 10)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100425773074183"}
+Publish Status: 200 -> Media ID: {"id":"18134598562629961"}
+
+[11/37] Publishing 'Financial Literacy & Wealth Library' (Reel 11)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100425848074183"}
+Publish Status: 200 -> Media ID: {"id":"18009723740974779"}
+
+[12/37] Publishing 'Interactive STEM Textbooks for High School' (Reel 12)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100425944074183"}
+Publish Status: 200 -> Media ID: {"id":"18112104305086330"}
+
+[13/37] Publishing 'Hands-Free Audiobooks for Drivers' (Reel 13)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+Container Status: 200 -> Response: {"id":"18100425989074183"}
+Publish Status: 200 -> Media ID: {"id":"18116851717822214"}
+
+[14/37] Publishing 'Early Reader Phonics & Vocabulary' (Reel 14)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+Container Status: 200 -> Response: {"id":"18100426022074183"}
+Publish Status: 200 -> Media ID: {"id":"18107313569595624"}
+
+[15/37] Publishing 'AI Flashcard & Quiz Generator' (Reel 15)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100426067074183"}
+Publish Status: 200 -> Media ID: {"id":"18092983127439968"}
+
+[16/37] Publishing 'Rare Manuscripts & Historical Books' (Reel 16)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100426163074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AtkattKsFXoENa_WKbH4l3-"}}
+
+[17/37] Publishing 'Mindfulness & Mental Health Library' (Reel 17)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+Container Status: 200 -> Response: {"id":"18100426199074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AcfXvQlq_hidpNRVLgm_I3M"}}
+
+[18/37] Publishing 'The 100-Year Life Executive Reading List' (Reel 18)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100426325074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"Am8xO-E3gqKbzDsxEGpMllE"}}
+
+[19/37] Publishing 'Interactive Mystery & Crime Novels' (Reel 19)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100426364074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"An0WehoSOK7o30rhAMAjlxd"}}
+
+[20/37] Publishing 'Custom Font & Dyslexia Friendly Modes' (Reel 20)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+Container Status: 200 -> Response: {"id":"18100426388074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"APyV4Lo-1OqV5KbpWw5jeop"}}
+
+[21/37] Publishing 'Offline Unlimited Downloads Mode' (Reel 21)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+Container Status: 200 -> Response: {"id":"18100426430074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AG1-wyDu8RhiLJ-75paYaUw"}}
+
+[22/37] Publishing 'Biographies of Tech Pioneers' (Reel 22)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100426601074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AkUwmya9q4qlzjE_-qyaer_"}}
+
+[23/37] Publishing '3D Animated Biology & Medical Texts' (Reel 23)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100426772074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"Aan4K2Mq7Geux7plUw3pD1Y"}}
+
+[24/37] Publishing 'Audiobook Sleep Timer & Ambient Sounds' (Reel 24)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+Container Status: 200 -> Response: {"id":"18100426868074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"ARuKPAanjHZAT1NxVyX3qK4"}}
+
+[25/37] Publishing 'Kids Science & Space Exploration Storybooks' (Reel 25)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+Container Status: 200 -> Response: {"id":"18100427015074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AQtpmptudTaW3JAZ1CMCPmF"}}
+
+[26/37] Publishing 'AI Reader Assistant Answers Questions' (Reel 26)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100427327074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AqydyqWEEGfwMOozv80fKsc"}}
+
+[27/37] Publishing 'Deep Work & Focus Strategy Library' (Reel 27)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+Container Status: 200 -> Response: {"id":"18100427378074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"ArHIQiXeyP5qOStg9E8JBas"}}
+
+[28/37] Publishing 'Smart Highlight Sync Across All Devices' (Reel 28)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100427426074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AbYSaK7yk-pWtzRTPMUQV4I"}}
+
+[29/37] Publishing 'Graphic Novels & Manga with Animated Effects' (Reel 29)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100427534074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"ACNDBxFCop2nHrWrR8diEYe"}}
+
+[30/37] Publishing 'Join the Lasavo Books Global Reader Club' (Reel 30)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+Container Status: 200 -> Response: {"id":"18100427642074183"}
+Publish Status: 403 -> Media ID: {"error":{"message":"Application request limit reached","type":"OAuthException","is_transient":false,"code":4,"error_subcode":2207051,"error_user_title":"action is blocked","error_user_msg":"We restrict certain activity to protect our community. Tell us if you think we made a mistake.","fbtrace_id":"AsVm3pwDHf9ukY4uthdAlJd"}}
+
+[31/37] Publishing 'Why Digital Audiobooks Are Revolutionizing Education' (Post 1)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+
+[32/37] Publishing 'Executive Book Summaries for Busy Leaders' (Post 2)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+
+[33/37] Publishing 'Make Storytime Magical with 3D Interactive Storybooks' (Post 3)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_kids_interactive_story.jpg
+
+[34/37] Publishing 'High-Fidelity AI Audiobooks for Daily Commuters' (Post 4)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_ai_audiobook_studio.jpg
+
+[35/37] Publishing 'Build a Lifetime Digital Library' (Post 5)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+
+[36/37] Publishing 'Complete Platform Demo: How Lasavo Books Works' (Script 1)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_holographic_library.jpg
+
+[37/37] Publishing 'Top 10 Business Book Summaries of 2026' (Script 2)
+Asset: https://lasavo-school.netlify.app/social_assets/lasavo_books_executive_summary.jpg
+
+Finished! Success: 15, Failed: 15

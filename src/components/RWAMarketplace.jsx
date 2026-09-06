@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { RWA_ASSETS, SUPPORTED_CHAINS } from '../data/rwaData';
 
-export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+export default function RWAMarketplace({ onSelectAsset, onMintPreIPO, onTokenizeClick, selectedCategory, setSelectedCategory }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [riskFilter, setRiskFilter] = useState('all');
   const [activeDetailAsset, setActiveDetailAsset] = useState(null);
@@ -19,18 +18,39 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
   return (
     <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
+      {/* Listing Submission Banner for Property Owners / Developers */}
+      <div className="mb-10 p-6 rounded-3xl bg-gradient-to-r from-amber-950/60 via-slate-900 to-cyan-950/60 border border-amber-500/30 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl font-bold">
+            🏢
+          </div>
+          <div>
+            <h3 className="text-base font-extrabold text-white">List Your Real Estate or Fractional Investment Opportunity</h3>
+            <p className="text-xs text-slate-300">Are you a property developer or asset manager? Issue compliant RWA tokens with instant Razorpay & Web3 payment gateways.</p>
+          </div>
+        </div>
+
+        <button
+          onClick={onTokenizeClick}
+          className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition-all shrink-0"
+        >
+          <i className="fa-solid fa-plus-circle mr-1.5"></i>
+          List Opportunity Now
+        </button>
+      </div>
+
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-slate-800">
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-amber-500/10 text-amber-400 text-xs font-mono mb-2">
             <i className="fa-solid fa-layer-group"></i>
-            <span>MULTI-ASSET PROTOCOL MARKETPLACE</span>
+            <span>MULTI-VERTICAL RWA & STOCK MARKETPLACE</span>
           </div>
           <h2 className="text-3xl font-extrabold text-white tracking-tight">
-            Institutional Asset <span className="gold-gradient-text">Vaults</span> & <span className="cyan-gradient-text">Derivatives</span>
+            Institutional <span className="gold-gradient-text">Real Estate</span> & <span className="purple-gradient-text">Pre-IPO Stocks</span>
           </h2>
           <p className="mt-1 text-sm text-slate-400">
-            Direct peer-to-peer ownership and synthetic derivative trading with instant cross-chain liquidity.
+            Invest in fractionalized real estate and private pre-IPO stock synthetics with instant Live Razorpay (UPI / Card) or Web3 crypto settlement.
           </p>
         </div>
 
@@ -46,6 +66,7 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
           >
             All Verticals
           </button>
+
           <button
             onClick={() => setSelectedCategory('preipo')}
             className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
@@ -54,8 +75,9 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
                 : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
             }`}
           >
-            🚀 Pre-IPO Derivatives
+            📈 Pre-IPO Stocks (For Sale)
           </button>
+
           <button
             onClick={() => setSelectedCategory('realestate')}
             className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
@@ -64,8 +86,9 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
                 : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
             }`}
           >
-            🏢 Real Estate
+            🏢 Real Estate Projects
           </button>
+
           <button
             onClick={() => setSelectedCategory('debt')}
             className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
@@ -76,6 +99,7 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
           >
             📜 Fixed Income / T-Bills
           </button>
+
           <button
             onClick={() => setSelectedCategory('gold')}
             className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
@@ -99,7 +123,7 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search SpaceX, OpenAI, NYC Real Estate, Gold..."
+            placeholder="Search SpaceX, Dubai Real Estate, OpenAI, Vault Gold..."
             className="w-full pl-10 pr-4 py-2.5 rounded-xl glass-input text-xs font-medium focus:ring-1 focus:ring-amber-500"
           />
           {searchQuery && (
@@ -122,9 +146,9 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
           >
             <option value="all">All Risk Tiers</option>
             <option value="safe">Safe Haven / Risk-Free</option>
-            <option value="low">Low Risk</option>
+            <option value="low">Low Risk Real Estate</option>
             <option value="moderate">Moderate</option>
-            <option value="high">High Growth / Pre-IPO</option>
+            <option value="high">High Growth Pre-IPO</option>
           </select>
         </div>
 
@@ -195,7 +219,7 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-slate-900/70 p-3 rounded-xl border border-slate-800">
                   <div>
                     <span className="text-slate-400 block text-[10px] uppercase">Min Investment</span>
-                    <span className="text-slate-200 font-semibold">${asset.minInvestment} USDC</span>
+                    <span className="text-slate-200 font-semibold">${asset.minInvestment} USD</span>
                   </div>
                   <div>
                     <span className="text-slate-400 block text-[10px] uppercase">Collateral / Deed</span>
@@ -203,36 +227,38 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
                   </div>
                 </div>
 
-                {/* Supported Chain Logos */}
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-                  <span>Supported Chains:</span>
-                  <div className="flex items-center space-x-1">
-                    {asset.chainSupport.map((chainId) => {
-                      const c = SUPPORTED_CHAINS.find(x => x.id === chainId);
-                      return c ? <span key={chainId} title={c.name}>{c.icon}</span> : null;
-                    })}
+                {/* Payment Gateway Options Badge */}
+                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/60">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase">Payment Modes:</span>
+                  <div className="flex items-center space-x-2 text-[10px] font-mono">
+                    <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                      💳 Live Razorpay UPI
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                      ⚡ Crypto
+                    </span>
                   </div>
                 </div>
 
               </div>
             </div>
 
-            {/* Card Action Footer */}
+            {/* Card Action Footer: Direct Buy Button on EACH and EVERY Listing */}
             <div className="p-5 pt-0 grid grid-cols-2 gap-2">
               <button
                 onClick={() => setActiveDetailAsset(asset)}
                 className="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition-colors border border-slate-700"
               >
                 <i className="fa-solid fa-circle-info mr-1 text-cyan-400"></i>
-                Audit & Specs
+                Specs & Deed
               </button>
 
               <button
                 onClick={() => onSelectAsset(asset)}
-                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 transition-all"
+                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 transition-all flex items-center justify-center space-x-1.5"
               >
-                <i className="fa-solid fa-bolt mr-1"></i>
-                Trade Asset
+                <i className="fa-solid fa-bolt text-xs"></i>
+                <span>Invest / Buy</span>
               </button>
             </div>
 
@@ -323,7 +349,7 @@ export default function RWAMarketplace({ onSelectAsset, onMintPreIPO }) {
                 }}
                 className="w-1/2 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20"
               >
-                Proceed to Trade Asset
+                Proceed to Invest (Razorpay / Web3)
               </button>
             </div>
 

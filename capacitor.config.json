@@ -1,10 +1,10 @@
 {
-  "appId": "com.astrolas.app",
-  "appName": "Astrolas Palmistry Numerology",
+  "appId": "com.lasavo.school",
+  "appName": "Lasavo School",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {
-    "url": "https://astrolas.netlify.app",
+    "url": "https://lasavo-school.netlify.app",
     "cleartext": true
   },
   "plugins": {
